@@ -6,14 +6,18 @@ const postRouter = express.Router();
 
 postRouter.post(
   "/",
-  postMiddleware.checkCompletePostFrom("body"),
+  // postMiddleware.checkCompletePostFrom("body"),
   postController.postPost
 );
+
+postRouter.get("/category", postController.getCategory);
+
 postRouter.get(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
   postController.getPost
 );
+
 postRouter.get("/", postController.getPosts);
 postRouter.put(
   "/:id",

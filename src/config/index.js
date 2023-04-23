@@ -16,13 +16,13 @@ if (envFound.error) {
   );
 }
 
-if (process.env.MONGODB_URI === undefined) {
-  throw new AppError(
-    commonErrors.configError,
-    500,
-    "어플리케이션을 시작하려면 Mongo DB URI(MONGODB_URI) 환경변수가 필요합니다."
-  );
-}
+// if (process.env.MONGODB_URI === undefined) {
+//   throw new AppError(
+//     commonErrors.configError,
+//     500,
+//     "어플리케이션을 시작하려면 Mongo DB URI(MONGODB_URI) 환경변수가 필요합니다."
+//   );
+// }
 
 module.exports = {
   applicationName: process.env.APPLICATION_NAME || "app",

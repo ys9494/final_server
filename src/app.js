@@ -7,8 +7,8 @@ const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
 
 async function create() {
-  // MongoDB에 연결
-  await loader.connectMongoDB();
+  // MysqlDB에 연결
+  await loader.connectMysqlDB();
 
   console.log("express application을 초기화합니다.");
   const expressApp = express();

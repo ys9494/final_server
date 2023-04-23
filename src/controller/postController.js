@@ -1,16 +1,45 @@
 const { postService } = require("../service");
+const { Post } = require("../models");
 const util = require("../misc/util");
 
 const postController = {
   async postPost(req, res, next) {
     try {
-      const { title, content, author } = req.body;
-      const post = await postService.createPost({ title, content, author });
-      res.status(201).json(util.buildResponse(post));
+      /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+      const userId = 1;
+
+      const { category, title, content, summary } = req.body;
+      const postDto = {
+        userId,
+        category,
+        title,
+        content,
+        summary,
+      };
+      const newPost = await postService.createPost(postDto);
+      res.status(201).json(util.buildResponse(newPost));
     } catch (error) {
       next(error);
     }
   },
+
+  async getCategory(req, res, next) {
+    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    const userId = 1;
+    try {
+      const categories = await postService.getCategory(userId);
+      const posts = { post: "post" };
+
+      const result = {};
+      result.categories = categories;
+      result.posts = posts;
+
+      res.json(util.buildResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getPost(req, res, next) {
     try {
       const { id } = req.params;
