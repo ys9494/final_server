@@ -1,4 +1,4 @@
-const { Post } = require("./model");
+const { Post } = require("./models");
 const util = require("../misc/util");
 
 const postDAO = {
