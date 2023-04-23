@@ -1,4 +1,4 @@
-const { sequelize } = require("../models");
+const { sequelize } = require("../data-access/models");
 
 async function connectMysqlDB() {
   sequelize

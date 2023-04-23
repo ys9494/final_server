@@ -1,5 +1,5 @@
 const { postDAO } = require("../data-access");
-const { Post } = require("../models");
+const { Post } = require("../data-access/models");
 
 const postService = {
   async createPost(postDto) {

@@ -1,5 +1,5 @@
 const { postService } = require("../service");
-const { Post } = require("../models");
+const { Post } = require("../data-access/models");
 const util = require("../misc/util");
 
 const postController = {
