@@ -67,7 +67,7 @@ async function create() {
             reject(error);
           }
           console.log("- 들어오는 커넥션을 더 이상 받지 않도록 하였습니다.");
-          await loader.disconnectMongoDB();
+          await loader.disconnectMysqlDB();
           console.log("- DB 커넥션을 정상적으로 끊었습니다.");
           console.log("🟢 서버 중지 작업을 성공적으로 마쳤습니다.");
           this.isShuttingDown = false;

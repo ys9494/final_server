@@ -38,11 +38,6 @@ module.exports = class Post extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Post.belongsTo(db.User, {
-      foreignKey: "author",
-      targetKey: "id",
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    });
+    db.Post.belongsTo(db.User);
   }
 };
