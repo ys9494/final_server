@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("../config");
+const { sequelize } = require("../models");
 
 async function connectMongoDB() {
   mongoose.connection.on("connecting", () => {
@@ -28,7 +29,19 @@ async function disconnectMongoDB() {
   await mongoose.disconnect();
 }
 
+async function connectMysqlDB() {
+  sequelize
+    .sync({ force: false })
+    .then(() => {
+      console.log("🗄 Database connection success!");
+    })
+    .catch((err) => {
+      console.error("🗄 Database connection Error! " + err);
+    });
+}
+
 module.exports = {
   connectMongoDB,
   disconnectMongoDB,
+  connectMysqlDB,
 };
