@@ -1,6 +1,9 @@
 const dotenv = require("dotenv");
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
+const passportConfig = require("./passport");
+const mysqlConfig = require("./mysql");
+const firebaseAdmin = require("./firebase");
 
 process.env.NODE_ENV = process.env.NODE_ENV ?? "development";
 console.log(
@@ -16,18 +19,14 @@ if (envFound.error) {
   );
 }
 
-if (process.env.MONGODB_URI === undefined) {
-  throw new AppError(
-    commonErrors.configError,
-    500,
-    "어플리케이션을 시작하려면 Mongo DB URI(MONGODB_URI) 환경변수가 필요합니다."
-  );
-}
-
 module.exports = {
   applicationName: process.env.APPLICATION_NAME || "app",
 
   port: parseInt(process.env.PORT ?? "3000", 10),
 
-  mongoDBUri: process.env.MONGODB_URI,
+  mysql: mysqlConfig,
+
+  firebase: firebaseAdmin,
+
+  passport: passportConfig,
 };
