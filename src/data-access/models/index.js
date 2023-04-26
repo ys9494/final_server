@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/mysql")[env];
-const User = require("./user");
+const User = require("./User");
 const Post = require("./Post");
 
 const db = {};
