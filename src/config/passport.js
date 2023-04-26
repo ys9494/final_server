@@ -1,19 +1,15 @@
 const passport = require("passport");
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-const admin = require("firebase-admin");
-
-require("dotenv").config();
+const FirebaseStrategy = require("passport-firebase-jwt").Strategy;
+const firebaseAdmin = require("../config/firebase");
 
 const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
+  credential: firebaseAdmin.credential, // 여기를 업데이트했습니다.
 };
 
 passport.use(
-  new JwtStrategy(opts, async (jwt_payload, done) => {
+  new FirebaseStrategy(opts, async (token, done) => {
     try {
-      const userRecord = await admin.auth().getUser(jwt_payload.uid);
+      const userRecord = await firebaseAdmin.auth().getUser(token.uid);
 
       if (!userRecord) {
         throw new Error("회원을 찾을 수 없습니다.");
@@ -25,7 +21,7 @@ passport.use(
         nickname: userRecord.displayName,
         blogName: "",
         bio: "",
-        admin: jwt_payload.userType === "admin" ? "Y" : "N",
+        admin: false, // firebase에서 직접 admin 정보를 가져올 수 없기 때문에 임시로 false 설정
       };
 
       done(null, user);
