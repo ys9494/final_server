@@ -25,8 +25,8 @@ module.exports = class User extends Sequelize.Model {
           allowNull: false,
         },
         admin: {
-          type: Sequelize.STRING(1),
-          allowNull: false,
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
         },
       },
       {
@@ -43,5 +43,6 @@ module.exports = class User extends Sequelize.Model {
   }
   static associate(db) {
     db.User.hasMany(db.Post);
+    db.User.hasMany(db.Category);
   }
 };
