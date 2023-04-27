@@ -12,7 +12,12 @@ async function connectMysqlDB() {
 }
 
 async function disconnectMysqlDB() {
-  await sequelize.close();
+  try {
+    await sequelize.close();
+    console.log("🗄 Database connection closed successfully!");
+  } catch (err) {
+    console.error("🗄 Database close Error! " + err);
+  }
 }
 
 module.exports = {
