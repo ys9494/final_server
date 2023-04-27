@@ -1,16 +1,21 @@
 const express = require("express");
 const { postController } = require("../controller");
-const { postMiddleware } = require("../middleware");
+const { postMiddleware, categoryMiddleware } = require("../middleware");
 
 const postRouter = express.Router();
 
 postRouter.post(
   "/",
-  // postMiddleware.checkCompletePostFrom("body"),
+  postMiddleware.checkCompletePostFrom("body"),
+  categoryMiddleware.checkNonexistCategoryFrom("body"),
   postController.postPost
 );
 
-postRouter.get("/category", postController.getCategory);
+postRouter.get(
+  "/category/:id",
+  postMiddleware.checkPostIdFrom("params"),
+  postController.getPostsByCategory
+);
 
 postRouter.get(
   "/:id",
@@ -18,22 +23,20 @@ postRouter.get(
   postController.getPost
 );
 
-postRouter.get("/", postController.getPosts);
 postRouter.put(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
   postMiddleware.checkMinPostConditionFrom("body"),
   postController.putPost
 );
+
 postRouter.delete(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
   postController.deletePost
 );
-postRouter.delete(
-  "/",
-  postMiddleware.checkMinPostConditionFrom("body"),
-  postController.deletePosts
-);
+
+// 예시
+// postRouter.get("/", postController.getPosts);
 
 module.exports = postRouter;

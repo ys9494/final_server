@@ -8,10 +8,11 @@ const postController = {
       /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
       const userId = 1;
 
-      const { category, title, content, summary } = req.body;
+      const { categoryId, title, content, summary } = req.body;
+
       const postDto = {
         userId,
-        category,
+        categoryId,
         title,
         content,
         summary,
@@ -23,18 +24,13 @@ const postController = {
     }
   },
 
-  async getCategory(req, res, next) {
+  async getPostsByCategory(req, res, next) {
     /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
     try {
-      const categories = await postService.getCategory(userId);
-      const posts = { post: "post" };
-
-      const result = {};
-      result.categories = categories;
-      result.posts = posts;
-
-      res.json(util.buildResponse(result));
+      const { id } = req.params;
+      const posts = await postService.getPostsByCategory(userId, id);
+      res.json(util.buildResponse(posts));
     } catch (error) {
       next(error);
     }
@@ -49,25 +45,26 @@ const postController = {
       next(error);
     }
   },
-  async getPosts(req, res, next) {
-    try {
-      const { title, author } = req.query;
-      const posts = await postService.getPosts({ title, author });
-      res.json(util.buildResponse(posts));
-    } catch (error) {
-      next(error);
-    }
-  },
+
   async putPost(req, res, next) {
     try {
       const { id } = req.params;
-      const { title, content, author } = req.body;
-      const post = await postService.updatePost(id, { title, content, author });
-      res.json(util.buildResponse(post));
+
+      const { categoryId, title, content, summary } = req.body;
+
+      const postDto = {
+        categoryId,
+        title,
+        content,
+        summary,
+      };
+      const updatedPost = await postService.updatePost(id, postDto);
+      res.json(util.buildResponse(updatedPost));
     } catch (error) {
       next(error);
     }
   },
+
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
@@ -77,15 +74,17 @@ const postController = {
       next(error);
     }
   },
-  async deletePosts(req, res, next) {
-    try {
-      const { title, author } = req.body;
-      const posts = await postService.deletePosts({ title, author });
-      res.json(util.buildResponse(posts));
-    } catch (error) {
-      next(error);
-    }
-  },
+
+  // 예시
+  // async getPosts(req, res, next) {
+  //   try {
+  //     const { title, author } = req.query;
+  //     const posts = await postService.getPosts({ title, author });
+  //     res.json(util.buildResponse(posts));
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
 };
 
 module.exports = postController;

@@ -8,9 +8,9 @@ module.exports = class Post extends Sequelize.Model {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        category: {
-          type: Sequelize.STRING(50),
-          allowNull: false,
+        categoryId: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
         },
         title: {
           type: Sequelize.STRING(100),
@@ -22,7 +22,7 @@ module.exports = class Post extends Sequelize.Model {
         },
         summary: {
           type: Sequelize.STRING(100),
-          allowNull: false,
+          allowNull: true,
         },
       },
       {
@@ -39,5 +39,6 @@ module.exports = class Post extends Sequelize.Model {
   }
   static associate(db) {
     db.Post.belongsTo(db.User);
+    db.Post.belongsTo(db.Category);
   }
 };

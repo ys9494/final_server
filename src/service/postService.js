@@ -1,5 +1,5 @@
 const { postDAO } = require("../data-access");
-const { Post } = require("../data-access/models");
+const { Post, Category, User } = require("../data-access/models");
 
 const postService = {
   async createPost(postDto) {
@@ -7,35 +7,64 @@ const postService = {
     return createdPost;
   },
 
-  async getCategory(userId) {
-    const category = await Post.findAll({
-      attributes: ["category"],
-      group: ["category"],
+  async getPostsByCategory(userId, categoryId) {
+    const posts = await Post.findAll({
+      where: {
+        userId,
+        categoryId,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["nickname"],
+        },
+      ],
     });
-    
-    const categories = category.map((item) => item.category);
 
-    return categories;
+    return posts;
   },
-  // async getPost(id) {
-  //   const post = await postDAO.findOne(id);
-  //   return post;
-  // },
+
+  async getPost(id) {
+    const post = await Post.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: Category,
+          attributes: ["id", "name"],
+        },
+        {
+          model: User,
+          attributes: ["nickname"],
+        },
+      ],
+    });
+    return post;
+  },
+
+  async updatePost(id, postDto) {
+    const updatedPost = await Post.update(postDto, {
+      where: {
+        id,
+      },
+    });
+
+    return updatedPost;
+  },
+
+  async deletePost(id) {
+    const deletedPost = await Post.destroy({
+      where: {
+        id,
+      },
+    });
+    return deletedPost;
+  },
+
   // async getPosts({ title, author }) {
   //   const posts = await postDAO.findMany({ title, author });
   //   return posts;
-  // },
-  // async updatePost(id, { title, content, author }) {
-  //   const updatedPost = await postDAO.updateOne(id, { title, content, author });
-  //   return updatedPost;
-  // },
-  // async deletePost(id) {
-  //   const deletedPost = await postDAO.deleteOne(id);
-  //   return deletedPost;
-  // },
-  // async deletePosts({ title, author }) {
-  //   const deletedPosts = await postDAO.deleteMany({ title, author });
-  //   return deletedPosts;
   // },
 };
 
