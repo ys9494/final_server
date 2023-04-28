@@ -7,7 +7,6 @@ const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
-const passportConfig = require("./config/passport");
 
 async function create() {
   // MysqlDB에 연결
@@ -21,8 +20,6 @@ async function create() {
   expressApp.use(express.urlencoded({ extended: false }));
 
   expressApp.use(cookieParser());
-  expressApp.use(passportConfig.initialize());
-  passportConfig();
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {

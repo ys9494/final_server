@@ -2,7 +2,7 @@ const { userDAO } = require("../data-access");
 const util = require("../misc/util");
 
 const userService = {
-  async createUser({ uid, name, email, address, phoneNumber, nickname }) {
+  async createUser({ uid, blogName, email, nickname }) {
     const existedEmail = await userDAO.findOne({ email });
     if (existedEmail) {
       throw new Error("이미 가입된 이메일입니다.");
@@ -15,17 +15,15 @@ const userService = {
 
     const createdUser = await userDAO.create({
       uid,
-      name,
+      blogName,
       email,
-      address,
-      phoneNumber,
       nickname,
     });
     return createdUser;
   },
 
-  async getUser(id) {
-    const user = await userDAO.findOne({ id });
+  async getUser(uid) {
+    const user = await userDAO.findOne({ uid });
     const servedUser = util.removePassword(user);
     return servedUser;
   },
@@ -36,10 +34,7 @@ const userService = {
     return { sanitizedUsers, total, totalPage };
   },
 
-  async updateUser(
-    id,
-    { name, email, address, phoneNumber, nickname, profileImage, userType }
-  ) {
+  async updateUser(uid, { blogName, email, nickname }) {
     // email 수정하는 경우 이메일 중복 검사
     if (email !== undefined) {
       const existedEmail = await userDAO.findOne({ email });
@@ -56,28 +51,17 @@ const userService = {
       }
     }
 
-    // userType 수정하는 경우 유효값 검사
-    if (userType !== undefined) {
-      if (userType !== "user" && userType !== "admin") {
-        throw new Error("userType은 user 혹은 admin만 가능합니다.");
-      }
-    }
-
-    const updatedUser = await userDAO.updateOne(id, {
-      name,
+    const updatedUser = await userDAO.updateOne(uid, {
       email,
-      address,
-      phoneNumber,
+      blogName,
       nickname,
-      profileImage,
-      userType,
     });
     const servedUser = util.removePassword(updatedUser);
     return servedUser;
   },
 
-  async deleteUser(id) {
-    const deletedUser = await userDAO.deleteOne(id);
+  async deleteUser(uid) {
+    const deletedUser = await userDAO.deleteOne(uid);
     if (!deletedUser) {
       throw new Error("탈퇴할 사용자가 존재하지 않습니다.");
     }
