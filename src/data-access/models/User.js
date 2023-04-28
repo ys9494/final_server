@@ -28,10 +28,6 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(1),
           allowNull: false,
         },
-        userType: {
-          type: Sequelize.STRING(20),
-          allowNull: false,
-        },
       },
       {
         sequelize,
@@ -45,12 +41,12 @@ module.exports = class User extends Sequelize.Model {
       }
     );
   }
-  static associate(db) {
-    db.User.hasMany(db.Post, {
-      foreignKey: "author",
-      sourceKey: "id",
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    });
-  }
+  // static associate(db) {
+  //   db.User.hasMany(db.Post, {
+  //     foreignKey: "author",
+  //     sourceKey: "id",
+  //     onDelete: "cascade",
+  //     onUpdate: "cascade",
+  //   });
+  // }
 };

@@ -1,7 +1,6 @@
 const dotenv = require("dotenv");
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
-const passportConfig = require("./passport");
 const mysqlConfig = require("./mysql");
 const firebaseAdmin = require("./firebase");
 
@@ -27,6 +26,4 @@ module.exports = {
   mysql: mysqlConfig,
 
   firebase: firebaseAdmin,
-
-  passport: passportConfig,
 };

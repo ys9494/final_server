@@ -6,23 +6,17 @@ const userController = {
   // 회원가입
   async createUser(req, res, next) {
     try {
-      const { userType, name, email, password, nickname, blogname } = req.body;
+      const { email, password, nickname, blogname } = req.body;
 
-      let uid;
-      // Firebase 사용자 등록
-      if (userType === "firebase") {
-        const firebaseUser = await firebaseAdmin.auth().createUser({
-          email,
-          password,
-          displayName: nickname,
-        });
-        uid = firebaseUser.uid;
-      }
+      const firebaseUser = await firebaseAdmin.auth().createUser({
+        email,
+        password,
+        displayName: nickname,
+      });
+      const uid = firebaseUser.uid;
 
       const user = await userService.createUser({
-        userType,
         uid,
-        name,
         email,
         password,
         blogname,
@@ -38,10 +32,9 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const { id } = req.params;
-      const { userType, name, email, password, blogname, nickname } = req.body;
+      const { email, password, blogname, nickname } = req.body;
 
-      const user = await userService.updateUser(id, userType, {
-        name,
+      const user = await userService.updateUser(id, {
         email,
         password,
         blogname,
@@ -71,9 +64,7 @@ const userController = {
       const user = await userService.deleteUser(id);
 
       // Firebase 사용자 삭제
-      if (user.userType === "firebase") {
-        await firebaseAdmin.auth().deleteUser(id);
-      }
+      await firebaseAdmin.auth().deleteUser(id);
 
       res
         .clearCookie("accessToken")

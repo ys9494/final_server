@@ -3,24 +3,11 @@ const util = require("../misc/util");
 
 const userDAO = {
   // 회원가입
-  async create({
-    userType,
-    uid,
-    name,
-    email,
-    password,
-    address,
-    phoneNumber,
-    nickname,
-  }) {
+  async create({ uid, email, blogName, nickname }) {
     const user = await User.create({
-      userType,
-      uid: userType === "firebase" ? uid : undefined,
-      name,
+      uid,
       email,
-      password: userType === "local" ? password : undefined,
-      address,
-      phoneNumber,
+      blogName,
       nickname,
     });
     return user;
@@ -29,14 +16,10 @@ const userDAO = {
   // 단일 사용자 조회
   async findOne(filter) {
     const sanitizedFilter = util.sanitizeObject({
-      id: filter.id,
       uid: filter.uid,
-      name: filter.name,
       email: filter.email,
-      address: filter.address,
-      phoneNumber: filter.phoneNumber,
+      blogName: filter.blogName,
       nickname: filter.nickname,
-      userType: filter.userType,
     });
 
     const user = await User.findOne({ where: sanitizedFilter });
@@ -50,13 +33,10 @@ const userDAO = {
   },
 
   // 사용자 정보 수정
-  async updateOne(id, userType, toUpdate) {
+  async updateOne(id, toUpdate) {
     const sanitizedToUpdate = util.sanitizeObject({
-      name: toUpdate.name,
       email: toUpdate.email,
-      password: userType === "local" ? toUpdate.password : undefined,
-      address: toUpdate.address,
-      phoneNumber: toUpdate.phoneNumber,
+      blogName: toUpdate.blogName,
       nickname: toUpdate.nickname,
     });
 

@@ -1,50 +1,34 @@
-const passport = require("passport");
+const firebaseAdmin = require("../config");
 
 const authController = {
   // Firebase 로그인
-  loginFirebaseUser: (req, res, next) => {
-    passport.authenticate("firebase", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.status(401).json({ message: info.message });
+  loginUser: async (req, res, next) => {
+    const idToken = req.body.idToken;
+
+    try {
+      const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
+      const uid = decodedToken.uid;
+      const userRecord = await firebaseAdmin.auth().getUser(uid);
+
+      if (!userRecord) {
+        return res.status(401).json({ message: "회원을 찾을 수 없습니다." });
       }
 
-      req.login(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        res.cookie("accessToken", user.token, { httpOnly: true });
-        return res.json({ message: "Firebase 로그인 성공", user });
-      });
-    })(req, res, next);
-  },
+      const user = {
+        id: userRecord.uid,
+        email: userRecord.email,
+        nickname: userRecord.displayName,
+      };
 
-  // 로컬 로그인
-  loginLocalUser: (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.status(401).json({ message: info.message });
-      }
-
-      req.login(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        const token = util.generateToken(user);
-        res.cookie("accessToken", token, { httpOnly: true });
-        return res.json({ message: "로그인 성공", user });
-      });
-    })(req, res, next);
+      res.cookie("accessToken", idToken, { httpOnly: true });
+      return res.json({ message: "로그인 성공", user });
+    } catch (error) {
+      next(error);
+    }
   },
 
   // 로그아웃
   logoutUser: (req, res) => {
-    req.logout();
     res.clearCookie("accessToken");
     res.json({ message: "로그아웃 성공" });
   },
