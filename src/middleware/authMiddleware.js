@@ -41,7 +41,7 @@ const verifyIdToken = async (req, res, next) => {
   const idToken = authHeader.split("Bearer ")[1];
 
   try {
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
+    const decodedToken = await firebaseAdmin.auth.verifyIdToken(idToken);
     req.uid = decodedToken.uid;
     next();
   } catch (error) {

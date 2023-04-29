@@ -6,24 +6,29 @@ const userController = {
   // 회원가입
   async createUser(req, res, next) {
     try {
+      console.log("Received create user request"); // 로그 1: 요청이 시작되었음을 확인
       const { email, password, nickname, blogname } = req.body;
 
-      const firebaseUser = await firebaseAdmin.auth().createUser({
+      const firebaseUser = await firebaseAdmin.auth.createUser({
         email,
         password,
         displayName: nickname,
       });
+      console.log("Created Firebase user:", firebaseUser); // 로그 2: Firebase 사용자 생성 성공
+
       const uid = firebaseUser.uid;
 
       const user = await userService.createUser({
         uid,
         email,
-        password,
         blogname,
         nickname,
       });
+      console.log("Created user:", user); // 로그 3: 데이터베이스에 사용자 생성 성공
+
       res.status(201).json(util.buildResponse(user));
     } catch (error) {
+      console.error("Error in createUser:", error); // 로그 4: 에러 발생시 출력
       next(error);
     }
   },
@@ -31,12 +36,11 @@ const userController = {
   // 사용자 정보 수정
   async updateUser(req, res, next) {
     try {
-      const { id } = req.params;
-      const { email, password, blogname, nickname } = req.body;
+      const { uid } = req.params;
+      const { email, blogname, nickname } = req.body;
 
-      const user = await userService.updateUser(id, {
+      const user = await userService.updateUser(uid, {
         email,
-        password,
         blogname,
         nickname,
       });
@@ -49,8 +53,8 @@ const userController = {
   // 사용자 정보 조회
   async getUser(req, res, next) {
     try {
-      const { id } = req.params;
-      const user = await userService.getUser(id);
+      const { uid } = req.params;
+      const user = await userService.getUser(uid);
       res.json(util.buildResponse(user));
     } catch (error) {
       next(error);
@@ -60,11 +64,11 @@ const userController = {
   // 사용자 정보 삭제 (회원 탈퇴)
   async deleteUser(req, res, next) {
     try {
-      const { id } = req.params;
-      const user = await userService.deleteUser(id);
+      const { uid } = req.params;
+      const user = await userService.deleteUser(uid);
 
       // Firebase 사용자 삭제
-      await firebaseAdmin.auth().deleteUser(id);
+      await firebaseAdmin.auth.deleteUser(uid);
 
       res
         .clearCookie("accessToken")
