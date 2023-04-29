@@ -24,14 +24,12 @@ const userService = {
 
   async getUser(uid) {
     const user = await userDAO.findOne({ uid });
-    const servedUser = util.removePassword(user);
-    return servedUser;
+    return user;
   },
 
   async getAllUsers(page, perPage) {
     const { users, total, totalPage } = await userDAO.findAll(page, perPage);
-    const sanitizedUsers = users.map((object) => util.removePassword(object));
-    return { sanitizedUsers, total, totalPage };
+    return { users, total, totalPage };
   },
 
   async updateUser(uid, { blogName, email, nickname }) {

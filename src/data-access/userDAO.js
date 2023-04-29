@@ -1,4 +1,4 @@
-const { User } = require("./models/User");
+const { User } = require("./models");
 const util = require("../misc/util");
 
 const userDAO = {
@@ -33,7 +33,7 @@ const userDAO = {
   },
 
   // 사용자 정보 수정
-  async updateOne(id, toUpdate) {
+  async updateOne(uid, toUpdate) {
     const sanitizedToUpdate = util.sanitizeObject({
       email: toUpdate.email,
       blogName: toUpdate.blogName,
@@ -41,7 +41,7 @@ const userDAO = {
     });
 
     const [, updatedUsers] = await User.update(sanitizedToUpdate, {
-      where: { id },
+      where: { uid },
       returning: true,
     });
     const updatedUser = updatedUsers[0];
@@ -49,9 +49,9 @@ const userDAO = {
   },
 
   // 사용자 정보 삭제
-  async deleteOne(id) {
-    const user = await User.findOne({ where: { id } });
-    await User.destroy({ where: { id } });
+  async deleteOne(uid) {
+    const user = await User.findOne({ where: { uid } });
+    await User.destroy({ where: { uid } });
     return user;
   },
 };

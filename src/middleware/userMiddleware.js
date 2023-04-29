@@ -18,8 +18,9 @@ const joinSchema = Joi.object().keys({
 });
 
 // 회원가입 유효성 검사
-// 회원가입 유효성 검사
-const checkJoinFrom = () => (req, res, next) => {
+const checkJoinFrom = (req, res, next) => {
+  console.log("checkJoinFrom middleware 시작"); // 로그 추가
+
   const { nickname } = req.body;
 
   try {
@@ -27,6 +28,7 @@ const checkJoinFrom = () => (req, res, next) => {
     if (result.error) {
       throw result.error;
     }
+    console.log("checkJoinFrom middleware 완료"); // 로그 추가
     next();
   } catch (error) {
     next(new AppError(commonErrors.inputError, 400, `${error}`));
@@ -38,7 +40,7 @@ const checkUserIdFrom = () => (req, res, next) => {
   const { uid } = req.params;
   if (uid === ":uid") {
     next(
-      new AppError(commonErrors.inputError, 400, `${from}: id는 필수값입니다.`)
+      new AppError(commonErrors.inputError, 400, `${from}: uid는 필수값입니다.`)
     );
     return;
   }
