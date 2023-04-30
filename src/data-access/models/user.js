@@ -8,6 +8,10 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
+        uid: {
+          type: Sequelize.STRING(200),
+          allowNull: false,
+        },
         email: {
           type: Sequelize.STRING(50),
           allowNull: false,
@@ -18,11 +22,9 @@ module.exports = class User extends Sequelize.Model {
         },
         blogName: {
           type: Sequelize.STRING(100),
-          allowNull: false,
         },
         bio: {
           type: Sequelize.STRING(100),
-          allowNull: false,
         },
         admin: {
           type: Sequelize.BOOLEAN,
@@ -38,6 +40,24 @@ module.exports = class User extends Sequelize.Model {
         paranoid: true,
         charset: "utf8mb4",
         collate: "utf8mb4_general_ci",
+        hooks: {
+          beforeCreate: (user, options) => {
+            if (!user.blogName) {
+              user.blogName = `${user.nickname}의 블로그`;
+            }
+            if (!user.bio) {
+              user.bio = `${user.nickname}의 공간입니다`;
+            }
+          },
+          beforeUpdate: (user, options) => {
+            if (!user.blogName) {
+              user.blogName = `${user.nickname}의 블로그`;
+            }
+            if (!user.bio) {
+              user.bio = `${user.nickname}의 공간입니다`;
+            }
+          },
+        },
       }
     );
   }
