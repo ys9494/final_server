@@ -27,6 +27,7 @@ postRouter.put(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
   postMiddleware.checkMinPostConditionFrom("body"),
+  categoryMiddleware.checkNonexistCategoryFrom("body"),
   postController.putPost
 );
 

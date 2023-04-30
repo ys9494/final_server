@@ -2,7 +2,7 @@ const { userDAO } = require("../data-access");
 const util = require("../misc/util");
 
 const userService = {
-  async createUser({ uid, blogName, email, nickname, bio, admin }) {
+  async createUser({ uid, email, password, nickname, blogName, bio, admin }) {
     const existedEmail = await userDAO.findOne({ email });
     if (existedEmail) {
       throw new Error("이미 가입된 이메일입니다.");
@@ -13,11 +13,22 @@ const userService = {
       throw new Error("중복되는 닉네임입니다.");
     }
 
+    console.log("service info", {
+      uid,
+      email,
+      password,
+      nickname,
+      blogName,
+      bio,
+      admin,
+    });
+
     const createdUser = await userDAO.create({
       uid,
-      blogName,
       email,
+      password,
       nickname,
+      blogName,
       bio,
       admin,
     });
