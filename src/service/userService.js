@@ -2,7 +2,7 @@ const { userDAO } = require("../data-access");
 const util = require("../misc/util");
 
 const userService = {
-  async createUser({ uid, blogName, email, nickname }) {
+  async createUser({ uid, blogName, email, nickname, bio, admin }) {
     const existedEmail = await userDAO.findOne({ email });
     if (existedEmail) {
       throw new Error("이미 가입된 이메일입니다.");
@@ -18,6 +18,8 @@ const userService = {
       blogName,
       email,
       nickname,
+      bio,
+      admin,
     });
     return createdUser;
   },
