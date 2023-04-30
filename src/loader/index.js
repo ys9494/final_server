@@ -1,14 +1,15 @@
 const { sequelize } = require("../data-access/models");
 
 async function connectMysqlDB() {
-  sequelize
-    .sync({ force: false })
-    .then(() => {
-      console.log("🗄 Database connection success!");
-    })
-    .catch((err) => {
-      console.error("🗄 Database connection Error! " + err);
-    });
+  try {
+    await sequelize.authenticate();
+    console.log("🗄 Database connection success!");
+
+    await sequelize.sync({ force: true });
+    console.log("🗄 Database sync success!");
+  } catch (err) {
+    console.error("🗄 Database connection Error! " + err);
+  }
 }
 
 async function disconnectMysqlDB() {
