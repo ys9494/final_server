@@ -7,7 +7,7 @@ const userController = {
   async createUser(req, res, next) {
     try {
       console.log("Received create user request"); // 로그 1: 요청이 시작되었음을 확인
-      const { email, password, nickname, blogname } = req.body;
+      const { email, password, nickname, blogName, bio, admin } = req.body;
 
       const firebaseUser = await firebaseAdmin.auth.createUser({
         email,
@@ -18,11 +18,15 @@ const userController = {
 
       const uid = firebaseUser.uid;
 
+      console.log("uid", uid);
+
       const user = await userService.createUser({
         uid,
         email,
-        blogname,
         nickname,
+        blogName,
+        bio,
+        admin,
       });
       console.log("Created user:", user); // 로그 3: 데이터베이스에 사용자 생성 성공
 
@@ -37,12 +41,14 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const { uid } = req.params;
-      const { email, blogname, nickname } = req.body;
+      const { email, blogName, nickname } = req.body;
 
       const user = await userService.updateUser(uid, {
         email,
-        blogname,
         nickname,
+        blogName,
+        bio,
+        admin,
       });
       res.json(util.buildResponse(user));
     } catch (error) {

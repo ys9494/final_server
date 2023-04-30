@@ -1,4 +1,4 @@
-const { User } = require("./models");
+const User = require("./models/user");
 const util = require("../misc/util");
 
 const userDAO = {
