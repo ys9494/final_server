@@ -5,6 +5,8 @@ const config = require("./config");
 const AppError = require("./misc/AppError");
 const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
 
 async function create() {
   // MysqlDB에 연결
@@ -13,7 +15,11 @@ async function create() {
   console.log("express application을 초기화합니다.");
   const expressApp = express();
 
+  expressApp.use(logger("dev"));
   expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: false }));
+
+  expressApp.use(cookieParser());
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {
