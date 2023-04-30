@@ -23,6 +23,7 @@ const userController = {
       const user = await userService.createUser({
         uid,
         email,
+        password,
         nickname,
         blogName,
         bio,
@@ -41,10 +42,11 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const { uid } = req.params;
-      const { email, blogName, nickname } = req.body;
+      const { email, password, nickname, blogName, bio, admin } = req.body;
 
       const user = await userService.updateUser(uid, {
         email,
+        password,
         nickname,
         blogName,
         bio,
