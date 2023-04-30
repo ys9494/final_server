@@ -12,20 +12,19 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
-        password: {
-          type: Sequelize.STRING(100),
-          allowNull: false,
-        },
         blogName: {
           type: Sequelize.STRING(100),
           allowNull: false,
+          defaultValue: Sequelize.literal("CONCAT(nickname, '의 블로그')"),
         },
         bio: {
           type: Sequelize.STRING(100),
           allowNull: false,
+          defaultValue: Sequelize.literal("CONCAT(nickname, '의 공간입니다')"),
         },
         admin: {
           type: Sequelize.BOOLEAN,
+          allowNull: false,
           defaultValue: false,
         },
       },
@@ -40,9 +39,5 @@ module.exports = class User extends Sequelize.Model {
         collate: "utf8mb4_general_ci",
       }
     );
-  }
-  static associate(db) {
-    db.User.hasMany(db.Post);
-    db.User.hasMany(db.Category);
   }
 };
