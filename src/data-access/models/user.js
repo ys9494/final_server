@@ -8,21 +8,26 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
+        uid: {
+          type: Sequelize.STRING(200),
+          allowNull: false,
+        },
         email: {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
+        password: {
+          type: Sequelize.STRING(100),
+          allowNull: false,
+        },
         blogName: {
           type: Sequelize.STRING(100),
-          allowNull: true,
         },
         bio: {
           type: Sequelize.STRING(100),
-          allowNull: true,
         },
         admin: {
           type: Sequelize.BOOLEAN,
-          allowNull: true,
           defaultValue: false,
         },
       },
@@ -37,18 +42,25 @@ module.exports = class User extends Sequelize.Model {
         collate: "utf8mb4_general_ci",
         hooks: {
           beforeCreate: (user, options) => {
-            user.blogName = `${user.nickname}의 블로그`;
-            user.bio = `${user.nickname}의 공간입니다`;
+            if (!user.blogName) {
+              user.blogName = `${user.nickname}의 블로그`;
+            }
+            if (!user.bio) {
+              user.bio = `${user.nickname}의 공간입니다`;
+            }
           },
           beforeUpdate: (user, options) => {
-            user.blogName = `${user.nickname}의 블로그`;
-            user.bio = `${user.nickname}의 공간입니다`;
+            if (!user.blogName) {
+              user.blogName = `${user.nickname}의 블로그`;
+            }
+            if (!user.bio) {
+              user.bio = `${user.nickname}의 공간입니다`;
+            }
           },
         },
       }
     );
   }
-
   static associate(db) {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Category);
