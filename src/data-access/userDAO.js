@@ -3,11 +3,10 @@ const util = require("../misc/util");
 
 const userDAO = {
   // 회원가입
-  async create(uid, email, password, nickname, blogName, bio, admin) {
+  async create(uid, email, nickname, blogName, bio, admin) {
     const user = await User.create(
       uid,
       email,
-      password,
       nickname,
       blogName,
       bio,

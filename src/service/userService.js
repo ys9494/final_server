@@ -2,7 +2,7 @@ const { userDAO } = require("../data-access");
 const util = require("../misc/util");
 
 const userService = {
-  async createUser({ uid, email, password, nickname, blogName, bio, admin }) {
+  async createUser({ uid, email, nickname, blogName, bio, admin }) {
     const existedEmail = await userDAO.findOne({ email });
     if (existedEmail) {
       throw new Error("이미 가입된 이메일입니다.");
@@ -13,20 +13,9 @@ const userService = {
       throw new Error("중복되는 닉네임입니다.");
     }
 
-    console.log("service info", {
-      uid,
-      email,
-      password,
-      nickname,
-      blogName,
-      bio,
-      admin,
-    });
-
     const createdUser = await userDAO.create({
       uid,
       email,
-      password,
       nickname,
       blogName,
       bio,
@@ -45,7 +34,7 @@ const userService = {
     return { users, total, totalPage };
   },
 
-  async updateUser(uid, { blogName, email, nickname }) {
+  async updateUser(uid, { blogName, email, nickname, bio }) {
     // email 수정하는 경우 이메일 중복 검사
     if (email !== undefined) {
       const existedEmail = await userDAO.findOne({ email });
@@ -66,6 +55,7 @@ const userService = {
       email,
       blogName,
       nickname,
+      bio
     });
     const servedUser = util.removePassword(updatedUser);
     return servedUser;
