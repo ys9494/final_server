@@ -1,5 +1,5 @@
 const express = require("express");
-const { postController } = require("../controller");
+const { postController, mainController } = require("../controller");
 const { postMiddleware, categoryMiddleware } = require("../middleware");
 
 const postRouter = express.Router();
@@ -8,19 +8,19 @@ postRouter.post(
   "/",
   postMiddleware.checkCompletePostFrom("body"),
   categoryMiddleware.checkNonexistCategoryFrom("body"),
-  postController.postPost
+  postController.postPost,
 );
 
 postRouter.get(
   "/category/:id",
   postMiddleware.checkPostIdFrom("params"),
-  postController.getPostsByCategory
+  postController.getPostsByCategory,
 );
 
 postRouter.get(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
-  postController.getPost
+  postController.getPost,
 );
 
 postRouter.put(
@@ -28,16 +28,16 @@ postRouter.put(
   postMiddleware.checkPostIdFrom("params"),
   postMiddleware.checkMinPostConditionFrom("body"),
   categoryMiddleware.checkNonexistCategoryFrom("body"),
-  postController.putPost
+  postController.putPost,
 );
 
 postRouter.delete(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
-  postController.deletePost
+  postController.deletePost,
 );
 
 // 예시
-// postRouter.get("/", postController.getPosts);
+postRouter.get("/", mainController.getPosts);
 
 module.exports = postRouter;
