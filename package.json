@@ -18,11 +18,9 @@
     "firebase-admin": "^11.7.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.6.7",
     "morgan": "^1.10.0",
     "mysql2": "^3.2.3",
     "passport": "^0.6.0",
-    "passport-firebase-jwt": "^1.2.1",
     "passport-jwt": "^4.0.1",
     "sequelize": "^6.31.0",
     "sequelize-cli": "^6.6.0"
