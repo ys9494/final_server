@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-module.exports = class Post extends Sequelize.Model {
+module.exports = class Comment extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
@@ -8,29 +8,21 @@ module.exports = class Post extends Sequelize.Model {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        categoryId: {
+        postId: {
           type: Sequelize.INTEGER,
           allowNull: true,
-        },
-        title: {
-          type: Sequelize.STRING(100),
-          allowNull: false,
         },
         content: {
           type: Sequelize.STRING(100),
           allowNull: false,
-        },
-        summary: {
-          type: Sequelize.STRING(100),
-          allowNull: true,
         },
       },
       {
         sequelize,
         timestamps: true,
         underscored: true,
-        modelName: "Post",
-        tableName: "posts",
+        modelName: "Comment",
+        tableName: "comments",
         paranoid: true,
         charset: "utf8mb4",
         collate: "utf8mb4_general_ci",
@@ -38,8 +30,7 @@ module.exports = class Post extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Post.belongsTo(db.User);
-    db.Post.belongsTo(db.Category);
-    db.Post.hasMany(db.Comment);
+    db.Comment.belongsTo(db.User);
+    db.Comment.belongsTo(db.Post);
   }
 };

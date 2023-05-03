@@ -1,5 +1,6 @@
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
+const { Post } = require("../data-access/models");
 
 const checkCompletePostFrom = (from) => (req, res, next) => {
   const { title, content } = req[from];
@@ -53,8 +54,37 @@ const checkMinPostConditionFrom = (from) => (req, res, next) => {
   next();
 };
 
+const checkNonExistPostFrom = (from) => async (req, res, next) => {
+  const { id } = req[from];
+
+  console.log("게시글 id", id);
+
+  if (id === undefined) {
+    next();
+  }
+
+  const existPost = await Post.findOne({
+    where: {
+      id,
+    },
+  });
+
+  if (existPost === null) {
+    next(
+      new AppError(
+        commonErrors.resourceNotFoundError,
+        400,
+        `존재하지 않는 게시글입니다.`
+      )
+    );
+  }
+
+  next();
+};
+
 module.exports = {
   checkCompletePostFrom,
   checkPostIdFrom,
   checkMinPostConditionFrom,
+  checkNonExistPostFrom,
 };

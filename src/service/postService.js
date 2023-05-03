@@ -48,6 +48,7 @@ const postService = {
       where: {
         id,
       },
+      returning: true,
     });
 
     return updatedPost;
@@ -61,11 +62,6 @@ const postService = {
     });
     return deletedPost;
   },
-
-  // async getPosts({ title, author }) {
-  //   const posts = await postDAO.findMany({ title, author });
-  //   return posts;
-  // },
 };
 
 module.exports = postService;

@@ -7,34 +7,38 @@ const postRouter = express.Router();
 postRouter.post(
   "/",
   postMiddleware.checkCompletePostFrom("body"),
-  categoryMiddleware.checkNonexistCategoryFrom("body"),
-  postController.postPost,
+  categoryMiddleware.checkNonExistCategoryFrom("body"),
+  postController.postPost
 );
 
 postRouter.get(
   "/category/:id",
   postMiddleware.checkPostIdFrom("params"),
-  postController.getPostsByCategory,
+  categoryMiddleware.checkNonExistCategoryFrom("params"),
+  postController.getPostsByCategory
 );
 
 postRouter.get(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
-  postController.getPost,
+  postMiddleware.checkNonExistPostFrom("params"),
+  postController.getPost
 );
 
 postRouter.put(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
+  postMiddleware.checkNonExistPostFrom("params"),
   postMiddleware.checkMinPostConditionFrom("body"),
-  categoryMiddleware.checkNonexistCategoryFrom("body"),
-  postController.putPost,
+  categoryMiddleware.checkNonExistCategoryFrom("body"),
+  postController.putPost
 );
 
 postRouter.delete(
   "/:id",
   postMiddleware.checkPostIdFrom("params"),
-  postController.deletePost,
+  postMiddleware.checkNonExistPostFrom("params"),
+  postController.deletePost
 );
 
 // 예시
