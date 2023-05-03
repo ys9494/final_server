@@ -74,17 +74,6 @@ const postController = {
       next(error);
     }
   },
-
-  // 예시
-  // async getPosts(req, res, next) {
-  //   try {
-  //     const { title, author } = req.query;
-  //     const posts = await postService.getPosts({ title, author });
-  //     res.json(util.buildResponse(posts));
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // },
 };
 
 module.exports = postController;

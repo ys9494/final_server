@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const User = require("./user");
 const Post = require("./post");
 const Category = require("./category");
+const Comment = require("./category");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../../config/mysql")[env];
@@ -17,6 +18,7 @@ const sequelize = new Sequelize(
 db.User = User;
 db.Post = Post;
 db.Category = Category;
+db.Comment = Comment;
 
 Object.keys(db).forEach((modelName) => {
   console.log("err", config);

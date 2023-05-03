@@ -24,8 +24,9 @@ const checkExistCategoryFrom = (from) => async (req, res, next) => {
   next();
 };
 
-const checkNonexistCategoryFrom = (from) => async (req, res, next) => {
-  const { categoryId } = req[from];
+const checkNonExistCategoryFrom = (from) => async (req, res, next) => {
+  const categoryIdKey = from === "params" ? "id" : "categoryId";
+  const categoryId = req[from][categoryIdKey];
 
   if (categoryId === undefined) {
     next();
@@ -76,7 +77,7 @@ const checkCategoryIdFrom = (from) => (req, res, next) => {
 
 module.exports = {
   checkExistCategoryFrom,
-  checkNonexistCategoryFrom,
+  checkNonExistCategoryFrom,
   checkCompleteCategoryFrom,
   checkCategoryIdFrom,
 };

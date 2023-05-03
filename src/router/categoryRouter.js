@@ -16,6 +16,7 @@ categoryRouter.get("/", categoryController.getCategories);
 categoryRouter.put(
   "/:id",
   categoryMiddleware.checkCategoryIdFrom("params"),
+  categoryMiddleware.checkNonExistCategoryFrom("params"),
   categoryMiddleware.checkCompleteCategoryFrom("body"),
   categoryController.putCategory
 );
@@ -23,6 +24,7 @@ categoryRouter.put(
 categoryRouter.delete(
   "/:id",
   categoryMiddleware.checkCategoryIdFrom("params"),
+  categoryMiddleware.checkNonExistCategoryFrom("params"),
   categoryController.deleteCategory
 );
 
