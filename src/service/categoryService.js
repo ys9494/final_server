@@ -17,14 +17,12 @@ const categoryService = {
   },
 
   async updateCategory(id, userId, categoryDto) {
-    console.log("id", id);
     const updatedCategory = await Category.update(categoryDto, {
       where: {
         id,
         userId,
       },
     });
-
     return updatedCategory;
   },
 
