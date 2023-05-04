@@ -1,16 +1,17 @@
-const firebaseAdmin = require("../config");
+const { auth, initPromise } = require("../config").firebase;
 
 const authController = {
   // Firebase 로그인
   loginUser: async (req, res, next) => {
     const idToken = req.body.idToken;
-    console.log("firebaseAdmin:", firebaseAdmin);
+    console.log("firebaseAdmin:", auth);
     console.log(req.body);
 
     try {
-      const decodedToken = await firebaseAdmin.auth.verifyIdToken(idToken);
+      await initPromise;
+      const decodedToken = await auth.verifyIdToken(idToken);
       const uid = decodedToken.uid;
-      const userRecord = await firebaseAdmin.auth.getUser(uid);
+      const userRecord = await auth.getUser(uid);
 
       if (!userRecord) {
         return res.status(401).json({ message: "회원을 찾을 수 없습니다." });
