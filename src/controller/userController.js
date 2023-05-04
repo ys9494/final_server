@@ -1,20 +1,22 @@
 const { userService } = require("../service");
 const util = require("../misc/util");
-const firebaseAdmin = require("../config");
+const { auth, initPromise } = require("../config").firebase;
 
 const userController = {
   // 회원가입
   async createUser(req, res, next) {
     try {
-      console.log("Received create user request"); // 로그 1: 요청이 시작되었음을 확인
+      console.log("Received create user request");
       const { email, password, nickname, blogname } = req.body;
 
-      const firebaseUser = await firebaseAdmin.auth.createUser({
+      await initPromise;
+      const firebaseAuth = auth();
+      const firebaseUser = await firebaseAuth.createUser({
         email,
         password,
         displayName: nickname,
       });
-      console.log("Created Firebase user:", firebaseUser); // 로그 2: Firebase 사용자 생성 성공
+      console.log("Created Firebase user:", firebaseUser);
 
       const uid = firebaseUser.uid;
 
@@ -24,11 +26,11 @@ const userController = {
         blogname,
         nickname,
       });
-      console.log("Created user:", user); // 로그 3: 데이터베이스에 사용자 생성 성공
+      console.log("Created user:", user);
 
       res.status(201).json(util.buildResponse(user));
     } catch (error) {
-      console.error("Error in createUser:", error); // 로그 4: 에러 발생시 출력
+      console.error("Error in createUser:", error);
       next(error);
     }
   },
@@ -68,7 +70,7 @@ const userController = {
       const user = await userService.deleteUser(uid);
 
       // Firebase 사용자 삭제
-      await firebaseAdmin.auth.deleteUser(uid);
+      await auth.deleteUser(uid);
 
       res
         .clearCookie("accessToken")
