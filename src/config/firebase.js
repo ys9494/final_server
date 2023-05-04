@@ -1,19 +1,43 @@
-require("dotenv").config();
 const admin = require("firebase-admin");
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3();
 
-const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 
-if (!serviceAccountPath) {
-  throw new Error("GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하세요.");
-}
+const downloadFirebaseJsonKey = async () => {
+  const params = {
+    Bucket: "firebase-json-key",
+    Key: "team-project-171e5-firebase-adminsdk-544nx-a0738ab9f8.json",
+  };
 
-const serviceAccount = require(serviceAccountPath);
+  const data = await s3.getObject(params).promise();
+  return JSON.parse(data.Body.toString());
+};
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+const initializeFirebaseApp = async () => {
+  try {
+    const serviceAccount = await downloadFirebaseJsonKey();
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+    return admin.auth();
+  } catch (error) {
+    console.error("Failed to initialize Firebase app:", error);
+    process.exit(1);
+  }
+};
+
+let auth;
+
+const initPromise = initializeFirebaseApp().then((authInstance) => {
+  auth = authInstance;
 });
 
 module.exports = {
   admin,
-  auth: admin.auth(),
+  auth: () => auth,
+  initPromise,
 };
