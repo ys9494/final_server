@@ -24,6 +24,11 @@ module.exports = class Post extends Sequelize.Model {
           type: Sequelize.STRING(100),
           allowNull: true,
         },
+        views: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
+        },
       },
       {
         sequelize,
@@ -41,5 +46,6 @@ module.exports = class Post extends Sequelize.Model {
     db.Post.belongsTo(db.User);
     db.Post.belongsTo(db.Category);
     db.Post.hasMany(db.Comment);
+    db.Post.hasMany(db.Like);
   }
 };

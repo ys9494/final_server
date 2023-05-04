@@ -1,5 +1,5 @@
 const { postDAO } = require("../data-access");
-const { Post, Category, User } = require("../data-access/models");
+const { Post, Category, User, Comment } = require("../data-access/models");
 
 const postService = {
   async createPost(postDto) {
@@ -17,6 +17,14 @@ const postService = {
         {
           model: User,
           attributes: ["nickname"],
+        },
+        {
+          model: Comment,
+          attributes: ["id", "content", "createdAt"],
+          include: {
+            model: User,
+            attributes: ["nickname"],
+          },
         },
       ],
     });
@@ -37,6 +45,14 @@ const postService = {
         {
           model: User,
           attributes: ["nickname"],
+        },
+        {
+          model: Comment,
+          attributes: ["id", "content", "createdAt"],
+          include: {
+            model: User,
+            attributes: ["nickname"],
+          },
         },
       ],
     });

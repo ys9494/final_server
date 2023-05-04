@@ -1,4 +1,4 @@
-const { postService } = require("../service");
+const { postService, commentService } = require("../service");
 const { Post } = require("../data-access/models");
 const util = require("../misc/util");
 
@@ -40,6 +40,13 @@ const postController = {
     try {
       const { id } = req.params;
       const post = await postService.getPost(id);
+      if (!post) {
+        return res.status(404).send("게시글이 존재하지 않습니다.");
+      }
+
+      // 조회수 증가
+      post.views++;
+      await post.save();
       res.json(util.buildResponse(post));
     } catch (error) {
       next(error);
@@ -69,6 +76,7 @@ const postController = {
     try {
       const { id } = req.params;
       const post = await postService.deletePost(id);
+      // const comment = await commentService.deleteComment({ postId: id });
       res.json(util.buildResponse(post));
     } catch (error) {
       next(error);
