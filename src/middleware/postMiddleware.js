@@ -56,6 +56,7 @@ const checkMinPostConditionFrom = (from) => (req, res, next) => {
 
 const checkNonExistPostFrom = (from) => async (req, res, next) => {
   const { id } = req[from];
+  const { postId } = req[from];
 
   console.log("게시글 id", id);
 
@@ -65,7 +66,7 @@ const checkNonExistPostFrom = (from) => async (req, res, next) => {
 
   const existPost = await Post.findOne({
     where: {
-      id,
+      id: id ? id : postId,
     },
   });
 

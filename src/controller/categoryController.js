@@ -44,7 +44,6 @@ const categoryController = {
 
       const updatedCategory = await categoryService.updateCategory(
         id,
-        userId,
         categoryDto
       );
       res.json(util.buildResponse(updatedCategory));
@@ -59,7 +58,7 @@ const categoryController = {
 
     try {
       const { id } = req.params;
-      const category = await categoryService.deleteCategory(id, userId);
+      const category = await categoryService.deleteCategory(id);
       res.json(util.buildResponse(category));
     } catch (error) {
       next(error);

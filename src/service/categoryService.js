@@ -16,21 +16,19 @@ const categoryService = {
     return categories;
   },
 
-  async updateCategory(id, userId, categoryDto) {
+  async updateCategory(id, categoryDto) {
     const updatedCategory = await Category.update(categoryDto, {
       where: {
         id,
-        userId,
       },
     });
     return updatedCategory;
   },
 
-  async deleteCategory(id, userId) {
+  async deleteCategory(id) {
     const deletedCategory = await Category.destroy({
       where: {
         id,
-        userId,
       },
     });
 
