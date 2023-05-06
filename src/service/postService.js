@@ -1,81 +1,31 @@
 const { postDAO } = require("../data-access");
-const { Post, Category, User, Comment } = require("../data-access/models");
 
 const postService = {
-  async createPost(postDto) {
-    const createdPost = await Post.create(postDto);
+  async createPost(postDTO) {
+    const createdPost = await postDAO.create(postDTO);
     return createdPost;
   },
 
   async getPostsByCategory(userId, categoryId) {
-    const posts = await Post.findAll({
-      where: {
-        userId,
-        categoryId,
-      },
-      include: [
-        {
-          model: User,
-          attributes: ["nickname"],
-        },
-        {
-          model: Comment,
-          attributes: ["id", "content", "createdAt"],
-          include: {
-            model: User,
-            attributes: ["nickname"],
-          },
-        },
-      ],
+    const posts = await postDAO.findAllBy({
+      userId,
+      categoryId,
     });
-
     return posts;
   },
 
   async getPost(id) {
-    const post = await Post.findOne({
-      where: {
-        id,
-      },
-      include: [
-        {
-          model: Category,
-          attributes: ["id", "name"],
-        },
-        {
-          model: User,
-          attributes: ["nickname"],
-        },
-        {
-          model: Comment,
-          attributes: ["id", "content", "createdAt"],
-          include: {
-            model: User,
-            attributes: ["nickname"],
-          },
-        },
-      ],
-    });
+    const post = await postDAO.findOne({ id });
     return post;
   },
 
   async updatePost(id, postDto) {
-    const updatedPost = await Post.update(postDto, {
-      where: {
-        id,
-      },
-      returning: true,
-    });
-
+    const updatedPost = await postDAO.updateOne(postDto, { id });
     return updatedPost;
   },
 
   async deletePost(id) {
-    const deletedPost = await Post.destroy({
-      where: {
-        id,
-      },
-    });
+    const deletedPost = await postDAO.deleteOne({ id });
     return deletedPost;
   },
 };

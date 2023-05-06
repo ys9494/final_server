@@ -1,8 +1,8 @@
-const { Post } = require("../data-access/models");
+const { postDAO } = require("../data-access");
 
 const mainService = {
   async getPosts() {
-    const posts = await Post.findAll();
+    const posts = await postDAO.findAll();
     return posts;
   },
 };
