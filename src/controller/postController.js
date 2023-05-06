@@ -1,58 +1,83 @@
-const { postService } = require("../service");
+const { postService, commentService } = require("../service");
+const { Post } = require("../data-access/models");
 const util = require("../misc/util");
 
 const postController = {
   async postPost(req, res, next) {
     try {
-      const { title, content, author } = req.body;
-      const post = await postService.createPost({ title, content, author });
-      res.status(201).json(util.buildResponse(post));
+      /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+      const userId = 1;
+
+      const { categoryId, title, content, summary } = req.body;
+
+      const postDto = {
+        userId,
+        categoryId,
+        title,
+        content,
+        summary,
+      };
+      const newPost = await postService.createPost(postDto);
+      res.status(201).json(util.buildResponse(newPost));
     } catch (error) {
       next(error);
     }
   },
+
+  async getPostsByCategory(req, res, next) {
+    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    const userId = 1;
+    try {
+      const { id } = req.params;
+      const posts = await postService.getPostsByCategory(userId, id);
+      res.json(util.buildResponse(posts));
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getPost(req, res, next) {
     try {
       const { id } = req.params;
       const post = await postService.getPost(id);
+      if (!post) {
+        return res.status(404).send("게시글이 존재하지 않습니다.");
+      }
+
+      // 조회수 증가
+      post.views++;
+      await post.save();
       res.json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
   },
-  async getPosts(req, res, next) {
-    try {
-      const { title, author } = req.query;
-      const posts = await postService.getPosts({ title, author });
-      res.json(util.buildResponse(posts));
-    } catch (error) {
-      next(error);
-    }
-  },
+
   async putPost(req, res, next) {
     try {
       const { id } = req.params;
-      const { title, content, author } = req.body;
-      const post = await postService.updatePost(id, { title, content, author });
-      res.json(util.buildResponse(post));
+
+      const { categoryId, title, content, summary } = req.body;
+
+      const postDto = {
+        categoryId,
+        title,
+        content,
+        summary,
+      };
+      const updatedPost = await postService.updatePost(id, postDto);
+      res.json(util.buildResponse(updatedPost));
     } catch (error) {
       next(error);
     }
   },
+
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
       const post = await postService.deletePost(id);
+      // const comment = await commentService.deleteComment({ postId: id });
       res.json(util.buildResponse(post));
-    } catch (error) {
-      next(error);
-    }
-  },
-  async deletePosts(req, res, next) {
-    try {
-      const { title, author } = req.body;
-      const posts = await postService.deletePosts({ title, author });
-      res.json(util.buildResponse(posts));
     } catch (error) {
       next(error);
     }
