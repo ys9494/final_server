@@ -5,5 +5,5 @@
 .DS_Store
 *.pem
 
-# local env files
+# local env files/오류
 .env
