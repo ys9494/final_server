@@ -24,33 +24,6 @@ const checkExistCategoryFrom = (from) => async (req, res, next) => {
   next();
 };
 
-const checkNonExistCategoryFrom = (from) => async (req, res, next) => {
-  const categoryIdKey = from === "params" ? "id" : "categoryId";
-  const categoryId = req[from][categoryIdKey];
-
-  if (categoryId === undefined) {
-    next();
-  }
-
-  const existCategory = await Category.findOne({
-    where: {
-      id: categoryId,
-    },
-  });
-
-  if (existCategory === null) {
-    next(
-      new AppError(
-        commonErrors.resourceNotFoundError,
-        400,
-        `존재하지 않는 카테고리입니다.`
-      )
-    );
-  }
-
-  next();
-};
-
 const checkCompleteCategoryFrom = (from) => (req, res, next) => {
   const { name } = req[from];
   if (name === undefined) {
@@ -65,19 +38,7 @@ const checkCompleteCategoryFrom = (from) => (req, res, next) => {
   next();
 };
 
-const checkCategoryIdFrom = (from) => (req, res, next) => {
-  const { id } = req[from];
-  if (id === undefined) {
-    next(
-      new AppError(commonErrors.inputError, 400, `${from}: id는 필수값입니다.`)
-    );
-  }
-  next();
-};
-
 module.exports = {
   checkExistCategoryFrom,
-  checkNonExistCategoryFrom,
   checkCompleteCategoryFrom,
-  checkCategoryIdFrom,
 };
