@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  config,
 );
 
 db.User = User;
@@ -19,7 +19,6 @@ db.Post = Post;
 db.Category = Category;
 
 Object.keys(db).forEach((modelName) => {
-  console.log("err", config);
   db[modelName].init(sequelize);
 });
 
