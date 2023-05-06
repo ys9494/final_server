@@ -49,7 +49,7 @@ const commentController = {
 
     try {
       const { id } = req.params;
-      const deletedComment = await commentService.deleteComment({ id });
+      const deletedComment = await commentService.deleteComment(id);
       res.json(util.buildResponse(deletedComment));
     } catch (error) {
       next(error);

@@ -1,26 +1,18 @@
-const { Comment, Post, User } = require("../data-access/models");
+const { commentDAO } = require("../data-access");
 
 const commentService = {
-  async createComment(commentDto) {
-    const createdComment = await Comment.create(commentDto);
+  async createComment(commentDTO) {
+    const createdComment = await commentDAO.create(commentDTO);
     return createdComment;
   },
 
-  async updateComment(id, commentDto) {
-    const updatedComment = await Comment.update(commentDto, {
-      where: {
-        id,
-      },
-      returning: true,
-    });
+  async updateComment(id, commentDTO) {
+    const updatedComment = await commentDAO.updateOne(commentDTO, { id });
     return updatedComment;
   },
 
-  async deleteComment(commentDto) {
-    const deletedComment = await Comment.destroy({
-      where: commentDto,
-    });
-
+  async deleteComment(id) {
+    const deletedComment = await commentDAO.deleteOne({ id });
     return deletedComment;
   },
 };

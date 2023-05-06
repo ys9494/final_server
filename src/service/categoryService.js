@@ -1,47 +1,28 @@
-const { Category, Post, User } = require("../data-access/models");
+const { categoryDAO, postDAO } = require("../data-access");
 
 const categoryService = {
-  async createCategory(categoryDto) {
-    const createdCategory = await Category.create(categoryDto);
+  async createCategory(categoryDTO) {
+    const createdCategory = await categoryDAO.create(categoryDTO);
     return createdCategory;
   },
 
   async getCategories(userId) {
-    const categories = await Category.findAll({
-      where: {
-        userId,
-      },
-    });
-
+    const categories = await categoryDAO.findAllBy({ userId });
     return categories;
   },
 
-  async updateCategory(id, categoryDto) {
-    const updatedCategory = await Category.update(categoryDto, {
-      where: {
-        id,
-      },
-    });
+  async updateCategory(id, categoryDTO) {
+    const updatedCategory = await categoryDAO.updateOne(categoryDTO, { id });
     return updatedCategory;
   },
 
   async deleteCategory(id) {
-    const deletedCategory = await Category.destroy({
-      where: {
-        id,
-      },
-    });
+    const deletedCategory = await categoryDAO.deleteOne({ id });
 
-    const updatePostCategory = await Post.update(
-      {
-        categoryId: null,
-      },
-      {
-        where: {
-          categoryId: id,
-        },
-      }
-    );
+    const postDTO = { categoryId: null };
+    const updatePostCategory = await postDAO.updateOne(postDTO, {
+      categoryId: id,
+    });
 
     return { deletedCategory, updatePostCategory };
   },
