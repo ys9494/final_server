@@ -1,28 +1,32 @@
 const express = require("express");
 const { commentController } = require("../controller");
-const { postMiddleware, commentMiddleware } = require("../middleware");
+const {
+  postMiddleware,
+  commentMiddleware,
+  commonMiddleware,
+} = require("../middleware");
 
 const commentRouter = express.Router();
 
 commentRouter.post(
   "/:postId",
-  postMiddleware.checkPostIdFrom("params"),
-  postMiddleware.checkNonExistPostFrom("params"),
+  commonMiddleware.checkIdFrom("params", "postId"),
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   commentController.postComment
 );
 
 commentRouter.put(
   "/:id",
-  commentMiddleware.checkCommentIdFrom("params"),
+  commonMiddleware.checkIdFrom("params", "id"),
   commentMiddleware.checkCompleteCommentFrom("body"),
-  commentMiddleware.checkNonExistCommentFrom("params"),
+  commonMiddleware.checkNonExistenceFrom("params", "id", "댓글"),
   commentController.putComment
 );
 
 commentRouter.delete(
   "/:id",
-  commentMiddleware.checkCommentIdFrom("params"),
-  commentMiddleware.checkNonExistCommentFrom("params"),
+  commonMiddleware.checkIdFrom("params", "id"),
+  commonMiddleware.checkNonExistenceFrom("params", "id", "댓글"),
   commentController.deleteComment
 );
 

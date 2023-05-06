@@ -6,7 +6,11 @@ const checkIdFrom = (from, checkId) => (req, res, next) => {
   const id = req[from][checkId];
   if (id === undefined) {
     next(
-      new AppError(commonErrors.inputError, 400, `${from}: id는 필수값입니다.`)
+      new AppError(
+        commonErrors.inputError,
+        400,
+        `${from}: ${checkId}는 필수값입니다.`
+      )
     );
   }
   next();
