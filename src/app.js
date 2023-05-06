@@ -5,15 +5,24 @@ const config = require("./config");
 const AppError = require("./misc/AppError");
 const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 async function create() {
-  // MongoDB에 연결
-  await loader.connectMongoDB();
+  // MysqlDB에 연결
+  await loader.connectMysqlDB();
 
   console.log("express application을 초기화합니다.");
   const expressApp = express();
 
+  expressApp.use(logger("dev"));
   expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: false }));
+
+  expressApp.use(cookieParser());
+
+  expressApp.use(cors());
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {
@@ -67,7 +76,7 @@ async function create() {
             reject(error);
           }
           console.log("- 들어오는 커넥션을 더 이상 받지 않도록 하였습니다.");
-          await loader.disconnectMongoDB();
+          await loader.disconnectMysqlDB();
           console.log("- DB 커넥션을 정상적으로 끊었습니다.");
           console.log("🟢 서버 중지 작업을 성공적으로 마쳤습니다.");
           this.isShuttingDown = false;

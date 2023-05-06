@@ -1,33 +1,82 @@
 const { postDAO } = require("../data-access");
+const { Post, Category, User, Comment } = require("../data-access/models");
 
 const postService = {
-  async createPost({ title, content, author }) {
-    const createdPost = await postDAO.create({
-      title,
-      content,
-      author,
-    });
+  async createPost(postDto) {
+    const createdPost = await Post.create(postDto);
     return createdPost;
   },
-  async getPost(id) {
-    const post = await postDAO.findOne(id);
-    return post;
-  },
-  async getPosts({ title, author }) {
-    const posts = await postDAO.findMany({ title, author });
+
+  async getPostsByCategory(userId, categoryId) {
+    const posts = await Post.findAll({
+      where: {
+        userId,
+        categoryId,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["nickname"],
+        },
+        {
+          model: Comment,
+          attributes: ["id", "content", "createdAt"],
+          include: {
+            model: User,
+            attributes: ["nickname"],
+          },
+        },
+      ],
+    });
+
     return posts;
   },
-  async updatePost(id, { title, content, author }) {
-    const updatedPost = await postDAO.updateOne(id, { title, content, author });
+
+  async getPost(id) {
+    const post = await Post.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: Category,
+          attributes: ["id", "name"],
+        },
+        {
+          model: User,
+          attributes: ["nickname"],
+        },
+        {
+          model: Comment,
+          attributes: ["id", "content", "createdAt"],
+          include: {
+            model: User,
+            attributes: ["nickname"],
+          },
+        },
+      ],
+    });
+    return post;
+  },
+
+  async updatePost(id, postDto) {
+    const updatedPost = await Post.update(postDto, {
+      where: {
+        id,
+      },
+      returning: true,
+    });
+
     return updatedPost;
   },
+
   async deletePost(id) {
-    const deletedPost = await postDAO.deleteOne(id);
+    const deletedPost = await Post.destroy({
+      where: {
+        id,
+      },
+    });
     return deletedPost;
-  },
-  async deletePosts({ title, author }) {
-    const deletedPosts = await postDAO.deleteMany({ title, author });
-    return deletedPosts;
   },
 };
 

@@ -1,8 +1,9 @@
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
+const { Post } = require("../data-access/models");
 
 const checkCompletePostFrom = (from) => (req, res, next) => {
-  const { title, content, author } = req[from];
+  const { title, content } = req[from];
   if (title === undefined) {
     next(
       new AppError(
@@ -21,36 +22,22 @@ const checkCompletePostFrom = (from) => (req, res, next) => {
       )
     );
   }
-  if (author === undefined) {
-    next(
-      new AppError(
-        commonErrors.inputError,
-        400,
-        `${from}: author는 필수값입니다.`
-      )
-    );
-  }
-  next();
-};
-
-const checkPostIdFrom = (from) => (req, res, next) => {
-  const { id } = req[from];
-  if (id === undefined) {
-    next(
-      new AppError(commonErrors.inputError, 400, `${from}: id는 필수값입니다.`)
-    );
-  }
   next();
 };
 
 const checkMinPostConditionFrom = (from) => (req, res, next) => {
-  const { title, content, author } = req[from];
-  if (title === undefined && content === undefined && author === undefined) {
+  const { title, content, categoryId, summary } = req[from];
+  if (
+    title === undefined &&
+    content === undefined &&
+    categoryId === undefined &&
+    summary === undefined
+  ) {
     next(
       new AppError(
         commonErrors.inputError,
         400,
-        `${from}: title, content, author중 최소 하나는 필요합니다.`
+        `${from}: title, content, categoryId, summary 최소 하나는 필요합니다.`
       )
     );
   }
@@ -59,6 +46,5 @@ const checkMinPostConditionFrom = (from) => (req, res, next) => {
 
 module.exports = {
   checkCompletePostFrom,
-  checkPostIdFrom,
   checkMinPostConditionFrom,
 };
