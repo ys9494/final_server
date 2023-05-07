@@ -1,30 +1,26 @@
-const { auth, initPromise } = require("../config").firebase;
+const { getAuth, initPromise } = require("../config").firebase;
 
 const authController = {
   // Firebase 로그인
   loginUser: async (req, res, next) => {
-    const idToken = req.body.idToken;
-    console.log("firebaseAdmin:", auth);
-    console.log(req.body);
+    const email = req.email;
+    const idToken = req.idToken;
+    const firebaseAuth = getAuth();
 
     try {
       await initPromise;
-      const decodedToken = await auth.verifyIdToken(idToken);
-      const uid = decodedToken.uid;
-      const userRecord = await auth.getUser(uid);
+      const userRecord = await firebaseAuth.getUserByEmail(email); // Firebase에서 이메일로 사용자 정보를 가져옵니다.
 
       if (!userRecord) {
         return res.status(401).json({ message: "회원을 찾을 수 없습니다." });
       }
 
       const user = {
-        uid: userRecord.uid,
         email: userRecord.email,
-        nickname: userRecord.displayName,
       };
 
       res.cookie("accessToken", idToken, { httpOnly: true });
-      return res.json({ message: "로그인 성공", user });
+      return res.json({ success: "로그인 성공", user });
     } catch (error) {
       next(error);
     }

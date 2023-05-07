@@ -25,7 +25,6 @@ const initializeFirebaseApp = async () => {
     });
     return admin.auth();
   } catch (error) {
-    console.error("Failed to initialize Firebase app:", error);
     process.exit(1);
   }
 };
@@ -38,6 +37,6 @@ const initPromise = initializeFirebaseApp().then((authInstance) => {
 
 module.exports = {
   admin,
-  auth: () => auth,
+  getAuth: () => auth,
   initPromise,
 };
