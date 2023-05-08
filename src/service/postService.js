@@ -8,25 +8,43 @@ const postService = {
 
   async getPostsByCategory(userId, categoryId) {
     const posts = await postDAO.findAllBy({
-      userId,
-      categoryId,
+      UserId: userId,
+      CategoryId: categoryId,
     });
     return posts;
   },
 
-  async getPost(id) {
-    const post = await postDAO.findOne({ id });
+  async getPost(postId) {
+    const post = await postDAO.findOne({ id: postId });
     return post;
   },
 
-  async updatePost(id, postDto) {
-    const updatedPost = await postDAO.updateOne(postDto, { id });
+  async updatePost(postId, postDto) {
+    const updatedPost = await postDAO.updateOne(postDto, { id: postId });
     return updatedPost;
   },
 
-  async deletePost(id) {
-    const deletedPost = await postDAO.deleteOne({ id });
+  async deletePost(postId) {
+    const deletedPost = await postDAO.deleteOne({ id: postId });
     return deletedPost;
+  },
+
+  async updateLike(postId, userId) {
+    const post = await postDAO.findOne({ id: postId });
+    if (!post) {
+      return res.status(404).send("포스트를 찾지 못했습니다.");
+    }
+    const updatedLike = await post.addLiker(userId);
+    return updatedLike;
+  },
+
+  async deleteLike(postId, userId) {
+    const post = await postDAO.findOne({ id: postId });
+    if (!post) {
+      return res.status(404).send("포스트를 찾지 못했습니다.");
+    }
+    const deletedLike = await post.removeLiker(userId);
+    return deletedLike;
   },
 };
 

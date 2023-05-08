@@ -12,7 +12,6 @@ const commentDAO = {
   async updateOne(commentDTO, filter) {
     const updatedComment = await Comment.update(commentDTO, {
       where: filter,
-      returning: true,
     });
 
     return updatedComment;

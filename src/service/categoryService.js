@@ -7,21 +7,23 @@ const categoryService = {
   },
 
   async getCategories(userId) {
-    const categories = await categoryDAO.findAllBy({ userId });
+    const categories = await categoryDAO.findAllBy({ UserId: userId });
     return categories;
   },
 
-  async updateCategory(id, categoryDTO) {
-    const updatedCategory = await categoryDAO.updateOne(categoryDTO, { id });
+  async updateCategory(categoryId, categoryDTO) {
+    const updatedCategory = await categoryDAO.updateOne(categoryDTO, {
+      id: categoryId,
+    });
     return updatedCategory;
   },
 
-  async deleteCategory(id) {
-    const deletedCategory = await categoryDAO.deleteOne({ id });
+  async deleteCategory(categoryId) {
+    const deletedCategory = await categoryDAO.deleteOne({ id: categoryId });
 
-    const postDTO = { categoryId: null };
+    const postDTO = { CategoryId: null };
     const updatePostCategory = await postDAO.updateOne(postDTO, {
-      categoryId: id,
+      CategoryId: categoryId,
     });
 
     return { deletedCategory, updatePostCategory };

@@ -4,52 +4,52 @@ const util = require("../misc/util");
 
 const commentController = {
   async postComment(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
     try {
       const { postId } = req.params;
       const { content } = req.body;
-      const commentDto = {
-        userId,
-        postId,
+      const commentDTO = {
+        UserId: userId,
+        PostId: postId,
         content,
       };
-      const newComment = await commentService.createComment(commentDto);
+      const newComment = await commentService.createComment(commentDTO);
       res.status(201).json(util.buildResponse(newComment));
     } catch (error) {
       next(error);
     }
   },
 
-  async putComment(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+  async patchComment(req, res, next) {
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
 
     try {
-      const { id } = req.params;
+      const { commentId } = req.params;
       const { content } = req.body;
 
-      const commentDto = {
+      const commentDTO = {
         content,
       };
       const updatedCategory = await commentService.updateComment(
-        id,
-        commentDto
+        commentId,
+        commentDTO
       );
       // res.json(util.buildResponse(updatedCategory));
-      res.json(updatedCategory);
+      res.json(util.buildResponse(updatedCategory));
     } catch (error) {
       next(error);
     }
   },
 
   async deleteComment(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
 
     try {
-      const { id } = req.params;
-      const deletedComment = await commentService.deleteComment(id);
+      const { commentId } = req.params;
+      const deletedComment = await commentService.deleteComment(commentId);
       res.json(util.buildResponse(deletedComment));
     } catch (error) {
       next(error);

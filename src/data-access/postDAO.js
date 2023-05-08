@@ -24,6 +24,12 @@ const postDAO = {
           attributes: ["nickname"],
         },
         {
+          model: User,
+          through: "Like", // DB 테이블 명
+          as: "Likers", // 프론트에 전달할 객체의 key
+          // attributes: ["id"],
+        },
+        {
           model: Comment,
           attributes: ["id", "content", "createdAt"],
           include: {
@@ -74,8 +80,9 @@ const postDAO = {
 
     const updatedPost = await Post.update(postDTO, {
       where: sanitizedToUpdate,
-      returning: true,
     });
+
+    console.log("log", updatedPost);
 
     return updatedPost;
   },
