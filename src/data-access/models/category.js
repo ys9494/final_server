@@ -8,10 +8,6 @@ module.exports = class Category extends Sequelize.Model {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
-        userId: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-        },
       },
       {
         sequelize,

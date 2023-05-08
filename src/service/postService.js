@@ -1,82 +1,50 @@
 const { postDAO } = require("../data-access");
-const { Post, Category, User, Comment } = require("../data-access/models");
 
 const postService = {
-  async createPost(postDto) {
-    const createdPost = await Post.create(postDto);
+  async createPost(postDTO) {
+    const createdPost = await postDAO.create(postDTO);
     return createdPost;
   },
 
   async getPostsByCategory(userId, categoryId) {
-    const posts = await Post.findAll({
-      where: {
-        userId,
-        categoryId,
-      },
-      include: [
-        {
-          model: User,
-          attributes: ["nickname"],
-        },
-        {
-          model: Comment,
-          attributes: ["id", "content", "createdAt"],
-          include: {
-            model: User,
-            attributes: ["nickname"],
-          },
-        },
-      ],
+    const posts = await postDAO.findAllBy({
+      UserId: userId,
+      CategoryId: categoryId,
     });
-
     return posts;
   },
 
-  async getPost(id) {
-    const post = await Post.findOne({
-      where: {
-        id,
-      },
-      include: [
-        {
-          model: Category,
-          attributes: ["id", "name"],
-        },
-        {
-          model: User,
-          attributes: ["nickname"],
-        },
-        {
-          model: Comment,
-          attributes: ["id", "content", "createdAt"],
-          include: {
-            model: User,
-            attributes: ["nickname"],
-          },
-        },
-      ],
-    });
+  async getPost(postId) {
+    const post = await postDAO.findOne({ id: postId });
     return post;
   },
 
-  async updatePost(id, postDto) {
-    const updatedPost = await Post.update(postDto, {
-      where: {
-        id,
-      },
-      returning: true,
-    });
-
+  async updatePost(postId, postDto) {
+    const updatedPost = await postDAO.updateOne(postDto, { id: postId });
     return updatedPost;
   },
 
-  async deletePost(id) {
-    const deletedPost = await Post.destroy({
-      where: {
-        id,
-      },
-    });
+  async deletePost(postId) {
+    const deletedPost = await postDAO.deleteOne({ id: postId });
     return deletedPost;
+  },
+
+  async updateLike(postId, userId) {
+    const post = await postDAO.findOne({ id: postId });
+    if (!post) {
+      return res.status(404).send("포스트를 찾지 못했습니다.");
+    }
+    const updatedLike = await post.addLiker(userId);
+    return updatedLike;
+  },
+
+  async deleteLike(postId, userId) {
+    const post = await postDAO.findOne({ id: postId });
+    if (!post) {
+      return res.status(404).send("포스트를 찾지 못했습니다.");
+    }
+    const deletedLike = await post.removeLiker(userId);
+    return deletedLike;
   },
 };
 
