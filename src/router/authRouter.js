@@ -5,11 +5,7 @@ const { authController, userController } = require("../controller");
 const authRouter = express.Router();
 
 // 회원가입
-authRouter.post(
-  "/join",
-  userMiddleware.checkJoinFrom,
-  userController.createUser
-);
+authRouter.post("/join", userController.createUser);
 
 // 로그인 (Firebase 사용)
 authRouter.post(

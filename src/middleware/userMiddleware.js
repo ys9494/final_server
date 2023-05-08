@@ -1,6 +1,7 @@
 const checkUserIdFrom = (source) => {
   return (req, res, next) => {
     const { uid } = req[source];
+    console.log(uid);
 
     if (uid !== req.uid) {
       // req 객체에서 저장된 uid와 일치하는지 확인합니다.

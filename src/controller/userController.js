@@ -7,15 +7,18 @@ const userController = {
   async createUser(req, res, next) {
     try {
       const { email, password, nickname, blogName, bio } = req.body;
+      console.log(req.body);
       await initPromise;
       const firebaseAuth = getAuth();
 
       // Firebase 사용자 생성
-      const firebaseUser = await firebaseAuth.createUserWithEmailAndPassword(
+      const firebaseUser = await firebaseAuth.createUser({
         email,
-        password
-      );
-      const id = firebaseUser.user.uid; // uid를 가져옵니다.
+        password,
+        displayName: nickname,
+      });
+
+      const id = firebaseUser.uid; // uid를 가져옵니다.
 
       // 데이터베이스에 사용자 정보 저장
       const user = await userService.createUser({
