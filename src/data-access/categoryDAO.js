@@ -25,7 +25,6 @@ const categoryDAO = {
 
     const updatedCategory = await Category.update(categoryDto, {
       where: sanitizedToUpdate,
-      returning: true,
     });
 
     return updatedCategory;

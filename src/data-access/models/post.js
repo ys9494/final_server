@@ -4,14 +4,6 @@ module.exports = class Post extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        userId: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-        },
-        categoryId: {
-          type: Sequelize.INTEGER,
-          allowNull: true,
-        },
         title: {
           type: Sequelize.STRING(100),
           allowNull: false,
@@ -25,11 +17,6 @@ module.exports = class Post extends Sequelize.Model {
           allowNull: true,
         },
         views: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-        likes: {
           type: Sequelize.INTEGER,
           allowNull: false,
           defaultValue: 0,
@@ -49,8 +36,11 @@ module.exports = class Post extends Sequelize.Model {
   }
   static associate(db) {
     db.Post.belongsTo(db.User);
+    db.Post.belongsToMany(db.User, {
+      through: "Like",
+      as: "Likers",
+    });
     db.Post.belongsTo(db.Category);
     db.Post.hasMany(db.Comment);
-    db.Post.hasMany(db.Like);
   }
 };

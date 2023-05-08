@@ -6,13 +6,15 @@ const commentService = {
     return createdComment;
   },
 
-  async updateComment(id, commentDTO) {
-    const updatedComment = await commentDAO.updateOne(commentDTO, { id });
+  async updateComment(commentId, commentDTO) {
+    const updatedComment = await commentDAO.updateOne(commentDTO, {
+      id: commentId,
+    });
     return updatedComment;
   },
 
-  async deleteComment(id) {
-    const deletedComment = await commentDAO.deleteOne({ id });
+  async deleteComment(commentId) {
+    const deletedComment = await commentDAO.deleteOne({ id: commentId });
     return deletedComment;
   },
 };
