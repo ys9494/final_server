@@ -1,23 +1,23 @@
-const { postService } = require("../service");
+const { postService, commentService } = require("../service");
 const { Post } = require("../data-access/models");
 const util = require("../misc/util");
 
 const postController = {
   async postPost(req, res, next) {
     try {
-      /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+      /** 추후 userId 받아오는 로직으로 변경 필요. */
       const userId = 1;
 
       const { categoryId, title, content, summary } = req.body;
 
-      const postDto = {
-        userId,
-        categoryId,
+      const postDTO = {
+        UserId: userId,
+        CategoryId: categoryId,
         title,
         content,
         summary,
       };
-      const newPost = await postService.createPost(postDto);
+      const newPost = await postService.createPost(postDTO);
       res.status(201).json(util.buildResponse(newPost));
     } catch (error) {
       next(error);
@@ -25,11 +25,11 @@ const postController = {
   },
 
   async getPostsByCategory(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
     try {
-      const { id } = req.params;
-      const posts = await postService.getPostsByCategory(userId, id);
+      const { categoryId } = req.params;
+      const posts = await postService.getPostsByCategory(userId, categoryId);
       res.json(util.buildResponse(posts));
     } catch (error) {
       next(error);
@@ -38,27 +38,37 @@ const postController = {
 
   async getPost(req, res, next) {
     try {
-      const { id } = req.params;
-      const post = await postService.getPost(id);
+      const { postId } = req.params;
+      const post = await postService.getPost(postId);
+      if (!post) {
+        return res.status(404).send("게시글이 존재하지 않습니다.");
+      }
+
+      // 조회수 증가
+      post.views++;
+      await post.save();
       res.json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
   },
 
-  async putPost(req, res, next) {
+  async patchPost(req, res, next) {
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
+    const userId = 1;
+
     try {
-      const { id } = req.params;
+      const { postId } = req.params;
 
       const { categoryId, title, content, summary } = req.body;
 
-      const postDto = {
-        categoryId,
+      const postDTO = {
+        CategoryId: categoryId,
         title,
         content,
         summary,
       };
-      const updatedPost = await postService.updatePost(id, postDto);
+      const updatedPost = await postService.updatePost(postId, postDTO);
       res.json(util.buildResponse(updatedPost));
     } catch (error) {
       next(error);
@@ -66,25 +76,44 @@ const postController = {
   },
 
   async deletePost(req, res, next) {
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
+    const userId = 1;
+
     try {
-      const { id } = req.params;
-      const post = await postService.deletePost(id);
+      const { postId } = req.params;
+      const post = await postService.deletePost(postId);
+      // const comment = await commentService.deleteComment({ postId });
       res.json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
   },
 
-  // 예시
-  // async getPosts(req, res, next) {
-  //   try {
-  //     const { title, author } = req.query;
-  //     const posts = await postService.getPosts({ title, author });
-  //     res.json(util.buildResponse(posts));
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // },
+  async patchLike(req, res, next) {
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
+    const userId = 1;
+
+    try {
+      const { postId } = req.params;
+      const updatedLike = await postService.updateLike(postId, userId);
+      res.json(util.buildResponse(updatedLike));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async deleteLike(req, res, next) {
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
+    const userId = 1;
+
+    try {
+      const { postId } = req.params;
+      const updatedLike = await postService.deleteLike(postId, userId);
+      res.json(util.buildResponse(updatedLike));
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = postController;

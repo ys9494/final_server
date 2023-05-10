@@ -1,43 +1,72 @@
 const express = require("express");
 const { postController, mainController } = require("../controller");
-const { postMiddleware, categoryMiddleware } = require("../middleware");
+const {
+  postMiddleware,
+  categoryMiddleware,
+  commonMiddleware,
+} = require("../middleware");
 
 const postRouter = express.Router();
 
+// 게시글 작성
 postRouter.post(
   "/",
   postMiddleware.checkCompletePostFrom("body"),
-  categoryMiddleware.checkNonexistCategoryFrom("body"),
-  postController.postPost,
+  commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
+  postController.postPost
 );
 
+// 카테고리별 게시글 조회
 postRouter.get(
-  "/category/:id",
-  postMiddleware.checkPostIdFrom("params"),
-  postController.getPostsByCategory,
+  "/category/:categoryId",
+  commonMiddleware.checkIdFrom("params", "categoryId"),
+  commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
+  postController.getPostsByCategory
 );
 
+// 게시글 상세 조회
 postRouter.get(
-  "/:id",
-  postMiddleware.checkPostIdFrom("params"),
-  postController.getPost,
+  "/:postId",
+  commonMiddleware.checkIdFrom("params", "postId"),
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  postController.getPost
 );
 
-postRouter.put(
-  "/:id",
-  postMiddleware.checkPostIdFrom("params"),
+// 게시글 수정
+postRouter.patch(
+  "/:postId",
+  commonMiddleware.checkIdFrom("params", "postId"),
   postMiddleware.checkMinPostConditionFrom("body"),
-  categoryMiddleware.checkNonexistCategoryFrom("body"),
-  postController.putPost,
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
+  postController.patchPost
 );
 
+// 게시글 삭제
 postRouter.delete(
-  "/:id",
-  postMiddleware.checkPostIdFrom("params"),
-  postController.deletePost,
+  "/:postId",
+  commonMiddleware.checkIdFrom("params", "postId"),
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  postController.deletePost
 );
 
-// 예시
+// 전체 게시글 조회
 postRouter.get("/", mainController.getPosts);
+
+// 좋아요
+postRouter.patch(
+  "/:postId/like",
+  commonMiddleware.checkIdFrom("params", "postId"),
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  postController.patchLike
+);
+
+// 좋아요 취소
+postRouter.delete(
+  "/:postId/like",
+  commonMiddleware.checkIdFrom("params", "postId"),
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  postController.deleteLike
+);
 
 module.exports = postRouter;

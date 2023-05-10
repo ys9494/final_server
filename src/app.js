@@ -8,6 +8,7 @@ const apiRouter = require("./router");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const cors = require("cors");
 
 async function create() {
   // MysqlDB에 연결
@@ -23,6 +24,8 @@ async function create() {
   expressApp.use(express.urlencoded({ extended: false }));
 
   expressApp.use(cookieParser());
+
+  expressApp.use(cors());
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {

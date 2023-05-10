@@ -1,4 +1,5 @@
 const User = require("./models/user");
+const User = require("./models/user");
 const util = require("../misc/util");
 
 const userDAO = {
@@ -7,6 +8,7 @@ const userDAO = {
     const user = await User.create({
       id,
       email,
+      nickname,
       nickname,
       blogName,
       nickname,

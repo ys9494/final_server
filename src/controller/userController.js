@@ -28,6 +28,8 @@ const userController = {
         nickname,
         blogName,
         bio,
+        blogName,
+        bio,
       });
 
       res.status(201).json(util.buildResponse(user));
@@ -45,6 +47,8 @@ const userController = {
       const user = await userService.updateUser(id, {
         email,
         nickname,
+        blogName,
+        bio,
         blogName,
         bio,
       });

@@ -1,5 +1,6 @@
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
+const { Post } = require("../data-access/models");
 
 const checkCompletePostFrom = (from) => (req, res, next) => {
   const { title, content } = req[from];
@@ -19,16 +20,6 @@ const checkCompletePostFrom = (from) => (req, res, next) => {
         400,
         `${from}: content는 필수값입니다.`
       )
-    );
-  }
-  next();
-};
-
-const checkPostIdFrom = (from) => (req, res, next) => {
-  const { id } = req[from];
-  if (id === undefined) {
-    next(
-      new AppError(commonErrors.inputError, 400, `${from}: id는 필수값입니다.`)
     );
   }
   next();
@@ -55,6 +46,5 @@ const checkMinPostConditionFrom = (from) => (req, res, next) => {
 
 module.exports = {
   checkCompletePostFrom,
-  checkPostIdFrom,
   checkMinPostConditionFrom,
 };
