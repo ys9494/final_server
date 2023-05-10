@@ -7,6 +7,7 @@ const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 async function create() {
   // MysqlDB에 연결
@@ -16,6 +17,7 @@ async function create() {
   console.log("express application을 초기화합니다.");
   const expressApp = express();
 
+  expressApp.use(cors());
   expressApp.use(logger("dev"));
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: false }));
