@@ -3,7 +3,6 @@ const User = require("./user");
 const Post = require("./post");
 const Category = require("./category");
 const Comment = require("./comment");
-const Like = require("./like");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../../config/mysql")[env];
@@ -13,14 +12,13 @@ const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config,
+  config
 );
 
 db.User = User;
 db.Post = Post;
 db.Category = Category;
 db.Comment = Comment;
-db.Like = Like;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);

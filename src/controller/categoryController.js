@@ -4,15 +4,15 @@ const util = require("../misc/util");
 
 const categoryController = {
   async postCategory(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
     try {
       const { name } = req.body;
-      const categoryDto = {
-        userId,
+      const categoryDTO = {
+        UserId: userId,
         name,
       };
-      const newCategory = await categoryService.createCategory(categoryDto);
+      const newCategory = await categoryService.createCategory(categoryDTO);
       res.status(201).json(util.buildResponse(newCategory));
     } catch (error) {
       next(error);
@@ -20,7 +20,7 @@ const categoryController = {
   },
 
   async getCategories(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
     try {
       const categories = await categoryService.getCategories(userId);
@@ -30,21 +30,21 @@ const categoryController = {
     }
   },
 
-  async putCategory(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+  async patchCategory(req, res, next) {
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
 
     try {
-      const { id } = req.params;
+      const { categoryId } = req.params;
       const { name } = req.body;
 
-      const categoryDto = {
+      const categoryDTO = {
         name,
       };
 
       const updatedCategory = await categoryService.updateCategory(
-        id,
-        categoryDto
+        categoryId,
+        categoryDTO
       );
       res.json(util.buildResponse(updatedCategory));
     } catch (error) {
@@ -53,12 +53,12 @@ const categoryController = {
   },
 
   async deleteCategory(req, res, next) {
-    /** 추후 session으로부터 userId 받아오는 로직으로 변경 필요. */
+    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = 1;
 
     try {
-      const { id } = req.params;
-      const category = await categoryService.deleteCategory(id);
+      const { categoryId } = req.params;
+      const category = await categoryService.deleteCategory(categoryId);
       res.json(util.buildResponse(category));
     } catch (error) {
       next(error);

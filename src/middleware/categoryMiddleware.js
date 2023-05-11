@@ -2,7 +2,7 @@ const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
 const { Category } = require("../data-access/models");
 
-const checkExistCategoryFrom = (from) => async (req, res, next) => {
+const checkExistCategoryNameFrom = (from) => async (req, res, next) => {
   const { name } = req[from];
   const existCategory = await Category.findOne({
     where: {
@@ -39,6 +39,6 @@ const checkCompleteCategoryFrom = (from) => (req, res, next) => {
 };
 
 module.exports = {
-  checkExistCategoryFrom,
+  checkExistCategoryNameFrom,
   checkCompleteCategoryFrom,
 };
