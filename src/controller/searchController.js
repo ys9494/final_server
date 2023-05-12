@@ -10,7 +10,7 @@ const searchController = {
       if (!searchResult) {
         return res.status(404).send("검색 결과가 존재하지 않습니다.");
       }
-      res.json(util.buildResponse(searchResult));
+      res.status(200).json(util.buildResponse(searchResult));
     } catch (error) {
       next(error);
     }

@@ -25,6 +25,5 @@ module.exports = {
 
   mysql: mysqlConfig,
 
-  firebase: firebaseAdmin.admin,
-  auth: firebaseAdmin.auth,
+  firebase: firebaseAdmin,
 };

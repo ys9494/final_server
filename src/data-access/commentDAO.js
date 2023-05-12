@@ -8,6 +8,12 @@ const commentDAO = {
     return createdComment;
   },
 
+  // 댓글 조회
+  async findOne(filter) {
+    const comment = await Comment.findOne({ where: filter });
+    return comment;
+  },
+
   // 댓글 수정
   async updateOne(commentDTO, filter) {
     const updatedComment = await Comment.update(commentDTO, {

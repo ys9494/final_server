@@ -4,6 +4,13 @@ module.exports = class Category extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
+        userId: {
+          type: Sequelize.STRING,
+          references: {
+            model: "users",
+            key: "id",
+          },
+        },
         name: {
           type: Sequelize.STRING(50),
           allowNull: false,
@@ -16,13 +23,13 @@ module.exports = class Category extends Sequelize.Model {
         modelName: "Category",
         tableName: "categories",
         paranoid: true,
-        charset: "utf8",
-        collate: "utf8_general_ci",
+        charset: "utf8mb4",
+        collate: "utf8mb4_general_ci",
       }
     );
   }
   static associate(db) {
-    db.Category.hasMany(db.Post);
+    db.Category.hasMany(db.Post, { onUpdate: "CASCADE", onDelete: "SET NULL" });
     db.Category.belongsTo(db.User);
   }
 };

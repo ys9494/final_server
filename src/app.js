@@ -13,6 +13,7 @@ const helmet = require("helmet");
 
 async function create() {
   // MysqlDB에 연결
+
   await loader.connectMysqlDB();
 
   console.log("express application을 초기화합니다.");
@@ -49,10 +50,6 @@ async function create() {
     res.json({
       status: "OK",
     });
-  });
-
-  expressApp.use("/", (req, res, next) => {
-    res.send("hello world");
   });
 
   // version 1의 api router를 등록

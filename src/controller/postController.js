@@ -5,11 +5,8 @@ const util = require("../misc/util");
 const postController = {
   async postPost(req, res, next) {
     try {
-      /** 추후 userId 받아오는 로직으로 변경 필요. */
-      const userId = 1;
-
+      const userId = req.uid;
       const { categoryId, title, content, summary } = req.body;
-
       const postDTO = {
         UserId: userId,
         CategoryId: categoryId,
@@ -25,12 +22,10 @@ const postController = {
   },
 
   async getPostsByCategory(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
     try {
       const { categoryId } = req.params;
-      const posts = await postService.getPostsByCategory(userId, categoryId);
-      res.json(util.buildResponse(posts));
+      const posts = await postService.getPostsByCategory(categoryId);
+      res.status(200).json(util.buildResponse(posts));
     } catch (error) {
       next(error);
     }
@@ -47,16 +42,13 @@ const postController = {
       // 조회수 증가
       post.views++;
       await post.save();
-      res.json(util.buildResponse(post));
+      res.status(200).json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
   },
 
   async patchPost(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
-
     try {
       const { postId } = req.params;
 
@@ -69,47 +61,41 @@ const postController = {
         summary,
       };
       const updatedPost = await postService.updatePost(postId, postDTO);
-      res.json(util.buildResponse(updatedPost));
+      res.status(200).json(util.buildResponse(updatedPost));
     } catch (error) {
       next(error);
     }
   },
 
   async deletePost(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
-
     try {
       const { postId } = req.params;
       const post = await postService.deletePost(postId);
-      // const comment = await commentService.deleteComment({ postId });
-      res.json(util.buildResponse(post));
+      res.status(200).json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
   },
 
   async patchLike(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
       const updatedLike = await postService.updateLike(postId, userId);
-      res.json(util.buildResponse(updatedLike));
+      res.status(200).json(util.buildResponse(updatedLike));
     } catch (error) {
       next(error);
     }
   },
 
   async deleteLike(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
       const updatedLike = await postService.deleteLike(postId, userId);
-      res.json(util.buildResponse(updatedLike));
+      res.status(200).json(util.buildResponse(updatedLike));
     } catch (error) {
       next(error);
     }

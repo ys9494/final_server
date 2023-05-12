@@ -4,8 +4,7 @@ const util = require("../misc/util");
 
 const commentController = {
   async postComment(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = req.uid;
     try {
       const { postId } = req.params;
       const { content } = req.body;
@@ -22,9 +21,6 @@ const commentController = {
   },
 
   async patchComment(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
-
     try {
       const { commentId } = req.params;
       const { content } = req.body;
@@ -36,21 +32,18 @@ const commentController = {
         commentId,
         commentDTO
       );
-      // res.json(util.buildResponse(updatedCategory));
-      res.json(util.buildResponse(updatedCategory));
+
+      res.status(200).json(util.buildResponse(updatedCategory));
     } catch (error) {
       next(error);
     }
   },
 
   async deleteComment(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
-
     try {
       const { commentId } = req.params;
       const deletedComment = await commentService.deleteComment(commentId);
-      res.json(util.buildResponse(deletedComment));
+      res.status(200).json(util.buildResponse(deletedComment));
     } catch (error) {
       next(error);
     }

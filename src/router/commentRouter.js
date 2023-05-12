@@ -4,6 +4,7 @@ const {
   postMiddleware,
   commentMiddleware,
   commonMiddleware,
+  authMiddleware,
 } = require("../middleware");
 
 const commentRouter = express.Router();
@@ -11,6 +12,7 @@ const commentRouter = express.Router();
 // 댓글
 commentRouter.post(
   "/:postId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   commentController.postComment
@@ -18,6 +20,7 @@ commentRouter.post(
 
 commentRouter.patch(
   "/:commentId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "commentId"),
   commentMiddleware.checkCompleteCommentFrom("body"),
   commonMiddleware.checkNonExistenceFrom("params", "commentId", "댓글"),
@@ -26,6 +29,7 @@ commentRouter.patch(
 
 commentRouter.delete(
   "/:commentId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "commentId"),
   commonMiddleware.checkNonExistenceFrom("params", "commentId", "댓글"),
   commentController.deleteComment
