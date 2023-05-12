@@ -24,10 +24,7 @@ const userController = {
       const user = await userService.createUser({
         id,
         email,
-        password,
         nickname,
-        blogName,
-        bio,
         blogName,
         bio,
       });
@@ -42,10 +39,9 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, blogName, nickname } = req.body;
+      const { blogName, nickname } = req.body;
 
       const user = await userService.updateUser(id, {
-        email,
         nickname,
         blogName,
         bio,
