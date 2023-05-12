@@ -8,18 +8,18 @@ const {
 
 const categoryRouter = express.Router();
 
+categoryRouter.get(
+  "/",
+  authMiddleware.verifyIdToken,
+  categoryController.getCategories
+);
+
 categoryRouter.post(
   "/",
   authMiddleware.verifyIdToken,
   categoryMiddleware.checkCompleteCategoryFrom("body"),
   categoryMiddleware.checkExistCategoryNameFrom("body"),
   categoryController.postCategory
-);
-
-categoryRouter.get(
-  "/",
-  authMiddleware.verifyIdToken,
-  categoryController.getCategories
 );
 
 categoryRouter.patch(

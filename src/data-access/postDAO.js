@@ -45,10 +45,8 @@ const postDAO = {
 
   // 게시글 조건 조회
   async findAllBy(filter) {
-    const sanitizedFilter = util.sanitizeObject(filter);
-
     const posts = await Post.findAll({
-      where: sanitizedFilter,
+      where: filter,
       include: [
         {
           model: User,

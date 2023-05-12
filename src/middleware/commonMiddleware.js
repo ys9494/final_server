@@ -49,7 +49,7 @@ const checkNonExistenceFrom =
       );
     }
 
-    if (existPost.userId !== userId) {
+    if (userId && existPost.userId !== userId) {
       next(
         new AppError(commonErrors.authorizationError, 403, `사용 권한이 없음`)
       );
