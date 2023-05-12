@@ -20,7 +20,6 @@ const categoryController = {
 
   async getCategories(req, res, next) {
     const userId = req.uid;
-    console.log("log", userId);
     try {
       const categories = await categoryService.getCategories(userId);
       res.status(200).json(util.buildResponse(categories));
