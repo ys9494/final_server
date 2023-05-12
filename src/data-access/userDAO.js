@@ -7,8 +7,6 @@ const userDAO = {
     const user = await User.create({
       id,
       email,
-      nickname,
-      nickname,
       blogName,
       nickname,
       bio,

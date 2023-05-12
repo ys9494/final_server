@@ -5,7 +5,7 @@ const util = require("../misc/util");
 const categoryController = {
   async postCategory(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = "WdezqbRDNkclowRnLUu6s4KETwp2";
     try {
       const { name } = req.body;
       const categoryDTO = {

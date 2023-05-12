@@ -8,6 +8,8 @@ const apiRouter = require("./router");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const hpp = require("hpp");
+const helmet = require("helmet");
 
 async function create() {
   // MysqlDB에 연결
@@ -17,8 +19,27 @@ async function create() {
   console.log("express application을 초기화합니다.");
   const expressApp = express();
 
-  expressApp.use(cors());
-  expressApp.use(logger("dev"));
+  if (process.env.NODE_ENV === "production") {
+    expressApp.use(logger("combined"));
+    expressApp.use(hpp());
+    expressApp.use(helmet({ contentSecurityPolicy: false }));
+    expressApp.use(
+      cors({
+        origin: true,
+        credentials: true,
+      })
+    );
+  } else {
+    console.log("log", process.env.NODE_ENV);
+    expressApp.use(logger("dev"));
+    expressApp.use(
+      cors({
+        origin: true,
+        credentials: true,
+      })
+    );
+  }
+
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: false }));
 
@@ -30,6 +51,10 @@ async function create() {
       status: "OK",
     });
   });
+
+  // expressApp.use("/", (req, res, next) => {
+  //   res.send("hello world");
+  // });
 
   // version 1의 api router를 등록
   expressApp.use("/api/v1", apiRouter.v1);
