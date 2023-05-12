@@ -29,8 +29,6 @@ const categoryController = {
   },
 
   async patchCategory(req, res, next) {
-    const userId = req.uid;
-
     try {
       const { categoryId } = req.params;
       const { name } = req.body;
