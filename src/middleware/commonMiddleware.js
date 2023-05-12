@@ -20,9 +20,6 @@ const checkNonExistenceFrom =
   (from, checkId, table) => async (req, res, next) => {
     const id = req[from][checkId];
     const userId = req.uid;
-
-    console.log("check id", id);
-
     const tableObj = {
       ["게시글"]: Post,
       ["카테고리"]: Category,
