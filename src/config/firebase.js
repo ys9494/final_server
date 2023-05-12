@@ -9,11 +9,25 @@ if (!serviceAccountPath) {
 
 const serviceAccount = require(serviceAccountPath);
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+const initializeFirebaseApp = async () => {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+    return admin.auth();
+  } catch (error) {
+    process.exit(1);
+  }
+};
+
+let auth;
+
+const initPromise = initializeFirebaseApp().then((authInstance) => {
+  auth = authInstance;
 });
 
 module.exports = {
   admin,
-  auth: admin.auth(),
+  getAuth: () => auth,
+  initPromise,
 };

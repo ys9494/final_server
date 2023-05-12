@@ -3,25 +3,25 @@ const util = require("../misc/util");
 
 const userDAO = {
   // 회원가입
-  async create(uid, email, nickname, blogName, bio, admin) {
-    const user = await User.create(
-      uid,
+  async create({ id, email, blogName, nickname, bio }) {
+    const user = await User.create({
+      id,
       email,
-      nickname,
       blogName,
+      nickname,
       bio,
-      admin
-    );
+    });
     return user;
   },
 
   // 단일 사용자 조회
   async findOne(filter) {
     const sanitizedFilter = util.sanitizeObject({
-      uid: filter.uid,
+      id: filter.id,
       email: filter.email,
       blogName: filter.blogName,
       nickname: filter.nickname,
+      bio: filter.bio,
     });
 
     const user = await User.findOne({ where: sanitizedFilter });
@@ -35,15 +35,15 @@ const userDAO = {
   },
 
   // 사용자 정보 수정
-  async updateOne(uid, toUpdate) {
+  async updateOne(id, toUpdate) {
     const sanitizedToUpdate = util.sanitizeObject({
-      email: toUpdate.email,
       blogName: toUpdate.blogName,
       nickname: toUpdate.nickname,
+      bio: toUpdate.bio,
     });
 
     const [, updatedUsers] = await User.update(sanitizedToUpdate, {
-      where: { uid },
+      where: { id },
       returning: true,
     });
     const updatedUser = updatedUsers[0];
@@ -51,9 +51,9 @@ const userDAO = {
   },
 
   // 사용자 정보 삭제
-  async deleteOne(uid) {
-    const user = await User.findOne({ where: { uid } });
-    await User.destroy({ where: { uid } });
+  async deleteOne(id) {
+    const user = await User.findOne({ where: { id } });
+    await User.destroy({ where: { id } });
     return user;
   },
 };
