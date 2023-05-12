@@ -21,7 +21,7 @@ if (envFound.error) {
 module.exports = {
   applicationName: process.env.APPLICATION_NAME || "app",
 
-  port: parseInt(process.env.PORT ?? "3000", 10),
+  port: parseInt(process.env.PORT ?? "80", 10),
 
   mysql: mysqlConfig,
 
