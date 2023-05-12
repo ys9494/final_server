@@ -5,9 +5,7 @@ const util = require("../misc/util");
 const postController = {
   async postPost(req, res, next) {
     try {
-      /** 추후 userId 받아오는 로직으로 변경 필요. */
-      const userId = 1;
-
+      const userId = req.uid;
       const { categoryId, title, content, summary } = req.body;
 
       const postDTO = {
@@ -25,11 +23,9 @@ const postController = {
   },
 
   async getPostsByCategory(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
     try {
       const { categoryId } = req.params;
-      const posts = await postService.getPostsByCategory(userId, categoryId);
+      const posts = await postService.getPostsByCategory(categoryId);
       res.json(util.buildResponse(posts));
     } catch (error) {
       next(error);
@@ -54,9 +50,6 @@ const postController = {
   },
 
   async patchPost(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
-
     try {
       const { postId } = req.params;
 
@@ -76,13 +69,9 @@ const postController = {
   },
 
   async deletePost(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
-
     try {
       const { postId } = req.params;
       const post = await postService.deletePost(postId);
-      // const comment = await commentService.deleteComment({ postId });
       res.json(util.buildResponse(post));
     } catch (error) {
       next(error);
@@ -90,8 +79,7 @@ const postController = {
   },
 
   async patchLike(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
@@ -103,8 +91,7 @@ const postController = {
   },
 
   async deleteLike(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
