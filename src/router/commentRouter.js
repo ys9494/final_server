@@ -8,6 +8,7 @@ const {
 
 const commentRouter = express.Router();
 
+// 댓글
 commentRouter.post(
   "/:postId",
   commonMiddleware.checkIdFrom("params", "postId"),
@@ -15,18 +16,18 @@ commentRouter.post(
   commentController.postComment
 );
 
-commentRouter.put(
-  "/:id",
-  commonMiddleware.checkIdFrom("params", "id"),
+commentRouter.patch(
+  "/:commentId",
+  commonMiddleware.checkIdFrom("params", "commentId"),
   commentMiddleware.checkCompleteCommentFrom("body"),
-  commonMiddleware.checkNonExistenceFrom("params", "id", "댓글"),
-  commentController.putComment
+  commonMiddleware.checkNonExistenceFrom("params", "commentId", "댓글"),
+  commentController.patchComment
 );
 
 commentRouter.delete(
-  "/:id",
-  commonMiddleware.checkIdFrom("params", "id"),
-  commonMiddleware.checkNonExistenceFrom("params", "id", "댓글"),
+  "/:commentId",
+  commonMiddleware.checkIdFrom("params", "commentId"),
+  commonMiddleware.checkNonExistenceFrom("params", "commentId", "댓글"),
   commentController.deleteComment
 );
 

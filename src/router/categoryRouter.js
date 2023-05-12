@@ -7,24 +7,24 @@ const categoryRouter = express.Router();
 categoryRouter.post(
   "/",
   categoryMiddleware.checkCompleteCategoryFrom("body"),
-  categoryMiddleware.checkExistCategoryFrom("body"),
+  categoryMiddleware.checkExistCategoryNameFrom("body"),
   categoryController.postCategory
 );
 
 categoryRouter.get("/", categoryController.getCategories);
 
-categoryRouter.put(
-  "/:id",
-  commonMiddleware.checkIdFrom("params", "id"),
-  commonMiddleware.checkNonExistenceFrom("params", "id", "카테고리"),
+categoryRouter.patch(
+  "/:categoryId",
+  commonMiddleware.checkIdFrom("params", "categoryId"),
+  commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
   categoryMiddleware.checkCompleteCategoryFrom("body"),
-  categoryController.putCategory
+  categoryController.patchCategory
 );
 
 categoryRouter.delete(
-  "/:id",
-  commonMiddleware.checkIdFrom("params", "id"),
-  commonMiddleware.checkNonExistenceFrom("params", "id", "카테고리"),
+  "/:categoryId",
+  commonMiddleware.checkIdFrom("params", "categoryId"),
+  commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
   categoryController.deleteCategory
 );
 
