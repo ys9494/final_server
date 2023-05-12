@@ -6,7 +6,7 @@ const mainController = {
   async getPosts(req, res, next) {
     try {
       const posts = await mainService.getPosts({});
-      res.json(util.buildResponse(posts));
+      res.status(200).json(util.buildResponse(posts));
     } catch (error) {
       next(error);
     }

@@ -26,7 +26,7 @@ const postController = {
     try {
       const { categoryId } = req.params;
       const posts = await postService.getPostsByCategory(categoryId);
-      res.json(util.buildResponse(posts));
+      res.status(200).json(util.buildResponse(posts));
     } catch (error) {
       next(error);
     }
@@ -43,7 +43,7 @@ const postController = {
       // 조회수 증가
       post.views++;
       await post.save();
-      res.json(util.buildResponse(post));
+      res.status(200).json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
@@ -62,7 +62,7 @@ const postController = {
         summary,
       };
       const updatedPost = await postService.updatePost(postId, postDTO);
-      res.json(util.buildResponse(updatedPost));
+      res.status(200).json(util.buildResponse(updatedPost));
     } catch (error) {
       next(error);
     }
@@ -72,7 +72,7 @@ const postController = {
     try {
       const { postId } = req.params;
       const post = await postService.deletePost(postId);
-      res.json(util.buildResponse(post));
+      res.status(200).json(util.buildResponse(post));
     } catch (error) {
       next(error);
     }
@@ -84,7 +84,7 @@ const postController = {
     try {
       const { postId } = req.params;
       const updatedLike = await postService.updateLike(postId, userId);
-      res.json(util.buildResponse(updatedLike));
+      res.status(200).json(util.buildResponse(updatedLike));
     } catch (error) {
       next(error);
     }
@@ -96,7 +96,7 @@ const postController = {
     try {
       const { postId } = req.params;
       const updatedLike = await postService.deleteLike(postId, userId);
-      res.json(util.buildResponse(updatedLike));
+      res.status(200).json(util.buildResponse(updatedLike));
     } catch (error) {
       next(error);
     }

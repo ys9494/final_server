@@ -33,7 +33,7 @@ const commentController = {
         commentDTO
       );
 
-      res.json(util.buildResponse(updatedCategory));
+      res.status(200).json(util.buildResponse(updatedCategory));
     } catch (error) {
       next(error);
     }
@@ -43,7 +43,7 @@ const commentController = {
     try {
       const { commentId } = req.params;
       const deletedComment = await commentService.deleteComment(commentId);
-      res.json(util.buildResponse(deletedComment));
+      res.status(200).json(util.buildResponse(deletedComment));
     } catch (error) {
       next(error);
     }

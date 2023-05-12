@@ -20,7 +20,7 @@ const authController = {
       };
 
       res.cookie("accessToken", idToken, { httpOnly: true });
-      return res.json({ success: "로그인 성공", data: { user, idToken } });
+      return res.status(200).json({ data: { user, idToken } });
     } catch (error) {
       next(error);
     }
@@ -29,7 +29,7 @@ const authController = {
   // 로그아웃
   logoutUser: (req, res) => {
     res.clearCookie("accessToken");
-    res.json({ message: "로그아웃 성공" });
+    res.status(200).json({ message: "로그아웃 성공" });
   },
 };
 
