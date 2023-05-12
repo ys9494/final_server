@@ -4,6 +4,7 @@ const {
   postMiddleware,
   categoryMiddleware,
   commonMiddleware,
+  authMiddleware,
 } = require("../middleware");
 
 const postRouter = express.Router();
@@ -11,6 +12,7 @@ const postRouter = express.Router();
 // 게시글 작성
 postRouter.post(
   "/",
+  authMiddleware.verifyIdToken,
   postMiddleware.checkCompletePostFrom("body"),
   commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
   postController.postPost
@@ -35,16 +37,18 @@ postRouter.get(
 // 게시글 수정
 postRouter.patch(
   "/:postId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   postMiddleware.checkMinPostConditionFrom("body"),
-  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
+  commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   postController.patchPost
 );
 
 // 게시글 삭제
 postRouter.delete(
   "/:postId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   postController.deletePost
@@ -56,6 +60,7 @@ postRouter.get("/", mainController.getPosts);
 // 좋아요
 postRouter.patch(
   "/:postId/like",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   postController.patchLike
@@ -64,6 +69,7 @@ postRouter.patch(
 // 좋아요 취소
 postRouter.delete(
   "/:postId/like",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
   postController.deleteLike

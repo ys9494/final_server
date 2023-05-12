@@ -42,17 +42,15 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, blogname, nickname } = req.body;
+      const { email, blogName, nickname } = req.body;
 
       const user = await userService.updateUser(id, {
         email,
         nickname,
         blogName,
         bio,
-        blogName,
-        bio,
       });
-      res.json(util.buildResponse(user));
+      res.status(200).json(util.buildResponse(user));
     } catch (error) {
       next(error);
     }
@@ -63,7 +61,7 @@ const userController = {
     try {
       const id = req.uid; // 수정된 부분
       const user = await userService.getUser(id);
-      res.json(util.buildResponse(user));
+      res.status(200).json(util.buildResponse(user));
     } catch (error) {
       next(error);
     }
@@ -80,6 +78,7 @@ const userController = {
 
       res
         .clearCookie("accessToken")
+        .status(204)
         .json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {
       next(error);
