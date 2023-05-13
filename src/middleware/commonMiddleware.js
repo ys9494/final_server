@@ -19,6 +19,7 @@ const checkIdFrom = (from, checkId) => (req, res, next) => {
 const checkNonExistenceFrom =
   (from, checkId, table) => async (req, res, next) => {
     const id = req[from][checkId];
+    const userId = req.uid;
 
     console.log("check id", id);
 
@@ -45,6 +46,12 @@ const checkNonExistenceFrom =
           400,
           `존재하지 않는 ${table}입니다.`
         )
+      );
+    }
+
+    if (existPost.userId !== userId) {
+      next(
+        new AppError(commonErrors.authorizationError, 403, `사용 권한이 없음`)
       );
     }
 
