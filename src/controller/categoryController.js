@@ -4,7 +4,6 @@ const util = require("../misc/util");
 
 const categoryController = {
   async postCategory(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = req.uid;
     try {
       const { name } = req.body;
@@ -20,18 +19,16 @@ const categoryController = {
   },
 
   async getCategories(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = req.uid;
     try {
       const categories = await categoryService.getCategories(userId);
-      res.json(util.buildResponse(categories));
+      res.status(200).json(util.buildResponse(categories));
     } catch (error) {
       next(error);
     }
   },
 
   async patchCategory(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
     const userId = req.uid;
 
     try {
@@ -53,13 +50,10 @@ const categoryController = {
   },
 
   async deleteCategory(req, res, next) {
-    /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = req.uid;
-
     try {
       const { categoryId } = req.params;
       const category = await categoryService.deleteCategory(categoryId);
-      res.json(util.buildResponse(category));
+      res.status(200).json(util.buildResponse(category));
     } catch (error) {
       next(error);
     }

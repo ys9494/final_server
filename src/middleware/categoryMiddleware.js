@@ -4,9 +4,12 @@ const { Category } = require("../data-access/models");
 
 const checkExistCategoryNameFrom = (from) => async (req, res, next) => {
   const { name } = req[from];
+  const userId = req.uid;
+
   const existCategory = await Category.findOne({
     where: {
       name,
+      userId,
     },
   });
   console.log("cat", existCategory);
