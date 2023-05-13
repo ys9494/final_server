@@ -41,7 +41,7 @@ const categoryController = {
 
       const updatedCategory = await categoryService.updateCategory(
         categoryId,
-        categoryDTO
+        categoryDTO,
       );
       res.json(util.buildResponse(updatedCategory));
     } catch (error) {

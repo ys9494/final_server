@@ -1,4 +1,4 @@
-const User = require("./models/user");
+const { User, Post, Category } = require("./models");
 const util = require("../misc/util");
 
 const userDAO = {
@@ -25,6 +25,72 @@ const userDAO = {
     });
 
     const user = await User.findOne({ where: sanitizedFilter });
+    return user;
+  },
+
+  // 마이페이지에서 본인 정보 조회
+  async findMyDetail(filter) {
+    const sanitizedFilter = util.sanitizeObject({
+      id: filter.id,
+      email: filter.email,
+      blogName: filter.blogName,
+      nickname: filter.nickname,
+      bio: filter.bio,
+    });
+
+    const user = await User.findOne({
+      where: sanitizedFilter,
+      include: [
+        {
+          model: Category,
+          attributes: ["id", "name"],
+        },
+        {
+          model: Post,
+          attributes: [
+            "id",
+            "title",
+            "content",
+            "summary",
+            "createdAt",
+            "updatedAt",
+          ],
+        },
+      ],
+    });
+    return user;
+  },
+
+  // 타 유저 페이지 조회
+  async findOneDetail(filter) {
+    const sanitizedFilter = util.sanitizeObject({
+      id: filter.id,
+      email: filter.email,
+      blogName: filter.blogName,
+      nickname: filter.nickname,
+      bio: filter.bio,
+    });
+
+    const user = await User.findOne({
+      where: sanitizedFilter,
+      include: [
+        {
+          model: Category,
+          attributes: ["id", "name"],
+        },
+        {
+          model: Post,
+          attributes: [
+            "id",
+            "title",
+            "content",
+            "summary",
+            "createdAt",
+            "updatedAt",
+          ],
+        },
+      ],
+    });
     return user;
   },
 

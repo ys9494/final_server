@@ -9,13 +9,19 @@ const {
 
 const postRouter = express.Router();
 
+// 전체 게시글 조회(최신순)
+postRouter.get("/recent", mainController.getPosts);
+
+// 전체 게시글 조회(조회수 순)
+postRouter.get("/trending", mainController.getPostsByTrending);
+
 // 게시글 작성
 postRouter.post(
   "/",
   authMiddleware.verifyIdToken,
   postMiddleware.checkCompletePostFrom("body"),
   commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
-  postController.postPost
+  postController.postPost,
 );
 
 // 카테고리별 게시글 조회
@@ -23,7 +29,7 @@ postRouter.get(
   "/category/:categoryId",
   commonMiddleware.checkIdFrom("params", "categoryId"),
   commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
-  postController.getPostsByCategory
+  postController.getPostsByCategory,
 );
 
 // 게시글 상세 조회
@@ -31,7 +37,7 @@ postRouter.get(
   "/:postId",
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
-  postController.getPost
+  postController.getPost,
 );
 
 // 게시글 수정
@@ -42,7 +48,7 @@ postRouter.patch(
   postMiddleware.checkMinPostConditionFrom("body"),
   commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
-  postController.patchPost
+  postController.patchPost,
 );
 
 // 게시글 삭제
@@ -51,11 +57,8 @@ postRouter.delete(
   authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
-  postController.deletePost
+  postController.deletePost,
 );
-
-// 전체 게시글 조회
-postRouter.get("/", mainController.getPosts);
 
 // 좋아요
 postRouter.patch(
@@ -63,7 +66,7 @@ postRouter.patch(
   authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
-  postController.patchLike
+  postController.patchLike,
 );
 
 // 좋아요 취소
@@ -72,7 +75,7 @@ postRouter.delete(
   authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
-  postController.deleteLike
+  postController.deleteLike,
 );
 
 module.exports = postRouter;

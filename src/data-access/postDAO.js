@@ -60,9 +60,25 @@ const postDAO = {
     return posts;
   },
 
-  // 게시글 전체 조회
+  // 게시글 전체 조회(최신 순)
   async findAll() {
     const posts = await Post.findAll({
+      order: [["createdAt", "desc"]],
+      include: [
+        {
+          model: User,
+          attributes: ["nickname"],
+        },
+      ],
+    });
+
+    return posts;
+  },
+
+  // 게시글 trending 조회
+  async findAllByTrending() {
+    const posts = await Post.findAll({
+      order: [["views", "desc"]],
       include: [
         {
           model: User,
