@@ -6,7 +6,7 @@ const postController = {
   async postPost(req, res, next) {
     try {
       /** 추후 userId 받아오는 로직으로 변경 필요. */
-      const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
+      const userId = req.uid;
 
       const { categoryId, title, content, summary } = req.body;
 
@@ -26,7 +26,7 @@ const postController = {
 
   async getPostsByCategory(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
+    const userId = req.uid;
     try {
       const { categoryId } = req.params;
       const posts = await postService.getPostsByCategory(userId, categoryId);
@@ -55,7 +55,7 @@ const postController = {
 
   async patchPost(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
@@ -77,7 +77,7 @@ const postController = {
 
   async deletePost(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
@@ -91,7 +91,7 @@ const postController = {
 
   async patchLike(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
@@ -104,7 +104,7 @@ const postController = {
 
   async deleteLike(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
+    const userId = req.uid;
 
     try {
       const { postId } = req.params;
