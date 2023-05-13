@@ -5,7 +5,7 @@ const util = require("../misc/util");
 const categoryController = {
   async postCategory(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = "WdezqbRDNkclowRnLUu6s4KETwp2";
+    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
     try {
       const { name } = req.body;
       const categoryDTO = {
@@ -21,7 +21,7 @@ const categoryController = {
 
   async getCategories(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
     try {
       const categories = await categoryService.getCategories(userId);
       res.json(util.buildResponse(categories));
@@ -32,7 +32,7 @@ const categoryController = {
 
   async patchCategory(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
 
     try {
       const { categoryId } = req.params;
@@ -44,7 +44,7 @@ const categoryController = {
 
       const updatedCategory = await categoryService.updateCategory(
         categoryId,
-        categoryDTO
+        categoryDTO,
       );
       res.json(util.buildResponse(updatedCategory));
     } catch (error) {
@@ -54,7 +54,7 @@ const categoryController = {
 
   async deleteCategory(req, res, next) {
     /** 추후 userId 받아오는 로직으로 변경 필요. */
-    const userId = 1;
+    const userId = "t1oQfUpQnDWiAwgFtGPX8AZcPR82";
 
     try {
       const { categoryId } = req.params;

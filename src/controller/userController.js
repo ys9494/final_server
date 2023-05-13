@@ -69,6 +69,34 @@ const userController = {
     }
   },
 
+  // 닉네임으로 사용자 정보 조회(유저 본인)
+  async getMyPageByNickname(req, res, next) {
+    try {
+      const { nickname } = req.query;
+      const result = await userService.getMyPageByNickname(nickname);
+      if (!result) {
+        return res.status(404).send("존재하지 않는 닉네임입니다.");
+      }
+      res.json(util.buildResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // 닉네임으로 사용자 정보 조회(타유저)
+  async getUserByNickname(req, res, next) {
+    try {
+      const { nickname } = req.query;
+      const result = await userService.getUserByNickname(nickname);
+      if (!result) {
+        return res.status(404).send("존재하지 않는 닉네임입니다.");
+      }
+      res.json(util.buildResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // 사용자 정보 삭제 (회원 탈퇴)
   async deleteUser(req, res, next) {
     try {

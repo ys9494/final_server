@@ -11,6 +11,15 @@ const mainController = {
       next(error);
     }
   },
+
+  async getPostsByTrending(req, res, next) {
+    try {
+      const posts = await mainService.getPostsByTrending({});
+      res.json(util.buildResponse(posts));
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = mainController;

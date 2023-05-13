@@ -38,6 +38,16 @@ const userService = {
     return { users, total, totalPage };
   },
 
+  async getMyPageByNickname(nickname) {
+    const nicknameUser = await userDAO.findMyDetail({ nickname });
+    return nicknameUser;
+  },
+
+  async getUserByNickname(nickname) {
+    const nicknameUser = await userDAO.findOneDetail({ nickname });
+    return nicknameUser;
+  },
+
   async updateUser(id, { blogName, email, nickname, bio }) {
     // email 수정하는 경우 이메일 중복 검사
     if (email !== undefined) {
