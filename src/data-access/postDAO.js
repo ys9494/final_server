@@ -61,8 +61,14 @@ const postDAO = {
   },
 
   // 게시글 전체 조회(최신 순)
-  async findAll() {
-    const posts = await Post.findAll({
+  async findAll(pageNo) {
+    let offset = 0; // 조회를 시작할 기준점 = 클릭하는 페이지 넘버
+    if (pageNo > 1) {
+      offset = (pageNo - 1) * 4;
+    }
+    const posts = await Post.findAndCountAll({
+      limit: 4, // 몇 개의 데이터를 보여줄지 결정(불변)
+      offset: offset,
       order: [["createdAt", "desc"]],
       include: [
         {
@@ -76,8 +82,14 @@ const postDAO = {
   },
 
   // 게시글 trending 조회
-  async findAllByTrending() {
-    const posts = await Post.findAll({
+  async findAllByTrending(pageNo) {
+    let offset = 0; // 조회를 시작할 기준점 = 클릭하는 페이지 넘버
+    if (pageNo > 1) {
+      offset = (pageNo - 1) * 4;
+    }
+    const posts = await Post.findAndCountAll({
+      limit: 4, // 몇 개의 데이터를 보여줄지 결정(불변)
+      offset: offset,
       order: [["views", "desc"]],
       include: [
         {
