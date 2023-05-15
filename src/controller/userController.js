@@ -42,7 +42,7 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, blogName, nickname } = req.body;
+      const { email, blogName, nickname, bio } = req.body;
 
       const user = await userService.updateUser(id, {
         email,
@@ -104,10 +104,7 @@ const userController = {
       // Firebase 사용자 삭제
       await auth.deleteUser(id);
 
-      res
-        .clearCookie("accessToken")
-        .status(204)
-        .json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
+      res.status(204).json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {
       next(error);
     }
