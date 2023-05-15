@@ -67,13 +67,13 @@ const userController = {
     }
   },
 
-  // 닉네임으로 사용자 정보 조회(유저 본인)
-  async getMyPageByNickname(req, res, next) {
+  // 사용자 정보 조회(유저 본인)
+  async getMyPage(req, res, next) {
     try {
-      const { nickname } = req.query;
-      const result = await userService.getMyPageByNickname(nickname);
+      const id = req.uid;
+      const result = await userService.getMyPage(id);
       if (!result) {
-        return res.status(404).send("존재하지 않는 닉네임입니다.");
+        return res.status(404).send("존재하지 않는 회원입니다.");
       }
       res.json(util.buildResponse(result));
     } catch (error) {
@@ -85,7 +85,9 @@ const userController = {
   async getUserByNickname(req, res, next) {
     try {
       const { nickname } = req.query;
+      console.log("nickname : ", nickname);
       const result = await userService.getUserByNickname(nickname);
+      console.log("result : ", result);
       if (!result) {
         return res.status(404).send("존재하지 않는 닉네임입니다.");
       }

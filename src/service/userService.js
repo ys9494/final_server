@@ -38,9 +38,9 @@ const userService = {
     return { users, total, totalPage };
   },
 
-  async getMyPageByNickname(nickname) {
-    const nicknameUser = await userDAO.findMyDetail({ nickname });
-    return nicknameUser;
+  async getMyPage(id) {
+    const user = await userDAO.findMyDetail({ id });
+    return user;
   },
 
   async getUserByNickname(nickname) {
