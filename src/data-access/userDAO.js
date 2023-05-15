@@ -94,6 +94,52 @@ const userDAO = {
     return user;
   },
 
+  // user를 팔로우 하는 users
+  async findFollowers(id) {
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id", "nickname"], // 반환하고자 하는 필드를 설정하세요.
+        },
+      ],
+    });
+    return user ? user.Followers : null;
+  },
+
+  // user가 팔로우 하는 users
+  async findFollowings(id) {
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: User,
+          as: "Followings",
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    return user ? user.Followings : null;
+  },
+
+  // 팔로우 추가
+  async addFollowing(userId, followingId) {
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) throw new Error("회원을 찾을 수 없습니다.");
+    await user.addFollowings(followingId);
+    return { userId, followingId };
+  },
+
+  // 팔로우 취소
+  async deleteFollowing(userId, followingId) {
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) throw new Error("회원을 찾을 수 없습니다.");
+    await user.removeFollowings(followingId);
+    return { userId, followingId };
+  },
+
   // 모든 사용자 조회
   async findAll() {
     const users = await User.findAll();

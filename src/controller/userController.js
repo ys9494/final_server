@@ -56,6 +56,52 @@ const userController = {
     }
   },
 
+  // user를 팔로우 하는 users
+  async getFollowers(req, res, next) {
+    try {
+      const followers = await userService.getFollowers(req.uid);
+      res.json(followers);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // user가 팔로우 하는 users
+  async getFollowings(req, res, next) {
+    try {
+      const followings = await userService.getFollowings(req.uid);
+      res.json(followings);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 추가
+  async addFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.addFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 취소
+  async deleteFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.deleteFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
   // 사용자 정보 조회
   async getUser(req, res, next) {
     try {
