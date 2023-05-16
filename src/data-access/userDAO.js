@@ -141,9 +141,17 @@ const userDAO = {
   },
 
   // 모든 사용자 조회
-  async findAll() {
-    const users = await User.findAll();
-    return users;
+  async findAll(page, perPage) {
+    const [total, users] = await Promise.all([
+      User.countDocuments({}),
+      User.find()
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { users, total, totalPage };
   },
 
   // 사용자 정보 수정
