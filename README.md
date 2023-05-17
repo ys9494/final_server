@@ -65,7 +65,7 @@ AI가 한 줄로 요약한 문장을 게시물의 썸네일로 하는 자유 주
 
 ## DB 테이블 구조
 
-![](https://file.notion.so/f/s/3c2e1f22-95d4-4b88-9244-1fcce0fe2bbe/Untitled.png?id=76210b73-3891-44c6-868f-815c1f17de95&table=block&spaceId=530d1033-cf9f-41a2-b140-62d3e90887dd&expirationTimestamp=1684373925794&signature=b000bzcU9P7BsotT4y6dCC3wH8U6iy0lbXXnM6R5Nwc&downloadName=Untitled.png)
+![](https://file.notion.so/f/s/3c2e1f22-95d4-4b88-9244-1fcce0fe2bbe/Untitled.png?id=76210b73-3891-44c6-868f-815c1f17de95&table=block&spaceId=530d1033-cf9f-41a2-b140-62d3e90887dd&expirationTimestamp=1684414252742&signature=ynt23XZKCvXDTXmWJTilN3Q9TsjIwaJk6PjcuZVSfFY&downloadName=Untitled.png)
 
 ## 기능
 
