@@ -6,6 +6,10 @@ const {
   commonMiddleware,
   authMiddleware,
 } = require("../middleware");
+const upload = require('../config/s3')
+
+
+
 
 const postRouter = express.Router();
 
@@ -22,6 +26,14 @@ postRouter.post(
   postMiddleware.checkCompletePostFrom("body"),
   commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
   postController.postPost,
+);
+
+// 이미지 업로드
+postRouter.post(
+  "/image",
+  // authMiddleware.verifyIdToken,
+  upload.single('image'),
+  postController.uploadImage,
 );
 
 // 카테고리별 게시글 조회

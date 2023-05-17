@@ -101,6 +101,15 @@ const postController = {
       next(error);
     }
   },
+
+  async uploadImage(req, res, next) {
+    try {
+        const imageUrl = req.file.location;
+        res.status(200).json({ imageUrl: imageUrl });
+    } catch (error) {
+        next(error);
+    }
+  },
 };
 
 module.exports = postController;
