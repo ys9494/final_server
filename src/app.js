@@ -13,6 +13,7 @@ const helmet = require("helmet");
 
 async function create() {
   // MysqlDB에 연결
+
   await loader.connectMysqlDB();
 
   console.log("express application을 초기화합니다.");

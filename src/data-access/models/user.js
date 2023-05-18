@@ -4,12 +4,13 @@ module.exports = class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
+        id: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          primaryKey: true,
+        },
         nickname: {
           type: Sequelize.STRING(50),
-          allowNull: false,
-        },
-        uid: {
-          type: Sequelize.STRING(200),
           allowNull: false,
         },
         email: {
@@ -18,9 +19,11 @@ module.exports = class User extends Sequelize.Model {
         },
         blogName: {
           type: Sequelize.STRING(100),
+          allowNull: true,
         },
         bio: {
           type: Sequelize.STRING(100),
+          allowNull: true,
         },
         admin: {
           type: Sequelize.BOOLEAN,
@@ -64,6 +67,17 @@ module.exports = class User extends Sequelize.Model {
     db.User.belongsToMany(db.Post, {
       through: "Like",
       as: "Liked",
+    });
+    // 팔로우 관계 추가
+    db.User.belongsToMany(db.User, {
+      through: "Follow",
+      as: "Followers",
+      foreignKey: "followingId",
+    });
+    db.User.belongsToMany(db.User, {
+      through: "Follow",
+      as: "Followings",
+      foreignKey: "followerId",
     });
   }
 };

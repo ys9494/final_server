@@ -1,37 +1,39 @@
 const { userService } = require("../service");
 const util = require("../misc/util");
-const firebaseAdmin = require("../config");
+const { getAuth, initPromise } = require("../config").firebase;
 
 const userController = {
   // 회원가입
   async createUser(req, res, next) {
     try {
-      console.log("Received create user request"); // 로그 1: 요청이 시작되었음을 확인
-      const { email, password, nickname, blogName, bio} = req.body;
+      const { email, password, nickname, blogName, bio } = req.body;
+      console.log(req.body);
+      await initPromise;
+      const firebaseAuth = getAuth();
 
-      const firebaseUser = await firebaseAdmin.auth.createUser({
+      // Firebase 사용자 생성
+      const firebaseUser = await firebaseAuth.createUser({
         email,
         password,
         displayName: nickname,
       });
-      console.log("Created Firebase user:", firebaseUser); // 로그 2: Firebase 사용자 생성 성공
 
-      const uid = firebaseUser.uid;
+      const id = firebaseUser.uid; // uid를 가져옵니다.
 
-      console.log("uid", uid);
-
+      // 데이터베이스에 사용자 정보 저장
       const user = await userService.createUser({
-        uid,
+        id,
         email,
+        password,
         nickname,
         blogName,
         bio,
+        blogName,
+        bio,
       });
-      console.log("Created user:", user); // 로그 3: 데이터베이스에 사용자 생성 성공
 
       res.status(201).json(util.buildResponse(user));
     } catch (error) {
-      console.error("Error in createUser:", error); // 로그 4: 에러 발생시 출력
       next(error);
     }
   },
@@ -39,27 +41,103 @@ const userController = {
   // 사용자 정보 수정
   async updateUser(req, res, next) {
     try {
-      const { uid } = req.params;
-      const { email, nickname, blogName, bio } = req.body;
+      const id = req.uid; // 수정된 부분
+      const { email, blogName, nickname, bio } = req.body;
 
-      const user = await userService.updateUser(uid, {
+      const user = await userService.updateUser(id, {
         email,
         nickname,
         blogName,
         bio,
       });
-      res.json(util.buildResponse(user));
+      res.status(200).json(util.buildResponse(user));
     } catch (error) {
       next(error);
+    }
+  },
+
+  // user를 팔로우 하는 users
+  async getFollowers(req, res, next) {
+    try {
+      const followers = await userService.getFollowers(req.uid);
+      res.json(followers);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // user가 팔로우 하는 users
+  async getFollowings(req, res, next) {
+    try {
+      const followings = await userService.getFollowings(req.uid);
+      res.json(followings);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 추가
+  async addFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.addFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 취소
+  async deleteFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.deleteFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
   },
 
   // 사용자 정보 조회
   async getUser(req, res, next) {
     try {
-      const { uid } = req.params;
-      const user = await userService.getUser(uid);
-      res.json(util.buildResponse(user));
+      const id = req.uid; // 수정된 부분
+      const user = await userService.getUser(id);
+      res.status(200).json(util.buildResponse(user));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // 사용자 정보 조회(유저 본인)
+  async getMyPage(req, res, next) {
+    try {
+      const id = req.uid;
+      const result = await userService.getMyPage(id);
+      if (!result) {
+        return res.status(404).send("존재하지 않는 회원입니다.");
+      }
+      res.json(util.buildResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // 닉네임으로 사용자 정보 조회(타유저)
+  async getUserByNickname(req, res, next) {
+    try {
+      const { nickname } = req.query;
+      console.log("nickname : ", nickname);
+      const result = await userService.getUserByNickname(nickname);
+      console.log("result : ", result);
+      if (!result) {
+        return res.status(404).send("존재하지 않는 닉네임입니다.");
+      }
+      res.json(util.buildResponse(result));
     } catch (error) {
       next(error);
     }
@@ -68,15 +146,13 @@ const userController = {
   // 사용자 정보 삭제 (회원 탈퇴)
   async deleteUser(req, res, next) {
     try {
-      const { uid } = req.params;
+      const id = req.uid; // 수정된 부분
       const user = await userService.deleteUser(uid);
 
       // Firebase 사용자 삭제
-      await firebaseAdmin.auth.deleteUser(uid);
+      await auth.deleteUser(id);
 
-      res
-        .clearCookie("accessToken")
-        .json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
+      res.status(204).json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {
       next(error);
     }

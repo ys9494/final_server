@@ -1,30 +1,43 @@
 const express = require("express");
 const { categoryController } = require("../controller");
-const { categoryMiddleware, commonMiddleware } = require("../middleware");
+const {
+  categoryMiddleware,
+  commonMiddleware,
+  authMiddleware,
+} = require("../middleware");
 
 const categoryRouter = express.Router();
 
 categoryRouter.post(
   "/",
+  authMiddleware.verifyIdToken,
   categoryMiddleware.checkCompleteCategoryFrom("body"),
   categoryMiddleware.checkExistCategoryNameFrom("body"),
   categoryController.postCategory
 );
 
-categoryRouter.get("/", categoryController.getCategories);
+categoryRouter.get(
+  "/",
+  authMiddleware.verifyIdToken,
+  categoryController.getCategories
+);
 
 categoryRouter.patch(
   "/:categoryId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "categoryId"),
-  commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
   categoryMiddleware.checkCompleteCategoryFrom("body"),
+  commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
+  commonMiddleware.checkUserAuthorization,
   categoryController.patchCategory
 );
 
 categoryRouter.delete(
   "/:categoryId",
+  authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "categoryId"),
   commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
+  commonMiddleware.checkUserAuthorization,
   categoryController.deleteCategory
 );
 
