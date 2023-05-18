@@ -22,17 +22,34 @@ userRouter.get(
 );
 
 // 개인페이지 > 내 정보(정보 수정 中 정보 수정)
-userRouter.put(
-  "/:id",
-  userMiddleware.checkUserIdFrom("params"),
-  userController.updateUser,
-);
+userRouter.patch("/", authMiddleware.verifyIdToken, userController.updateUser);
 
 // 개인페이지 > 내 정보(정보 수정 中 정보 삭제(탈퇴))
+userRouter.delete("/", authMiddleware.verifyIdToken, userController.deleteUser);
+
+// 팔로우
+userRouter.post(
+  "/followings/:followingId",
+  authMiddleware.verifyIdToken,
+  userController.addFollowing,
+);
+// 언팔
 userRouter.delete(
-  "/:id",
-  userMiddleware.checkUserIdFrom("params"),
-  userController.deleteUser,
+  "/followings/:followingId",
+  authMiddleware.verifyIdToken,
+  userController.deleteFollowing,
+);
+// user가 팔로우 하는 users 목록 반환
+userRouter.get(
+  "/followings",
+  authMiddleware.verifyIdToken,
+  userController.getFollowings,
+);
+// user를 팔로우 하는 users 목록 반환
+userRouter.get(
+  "followers",
+  authMiddleware.verifyIdToken,
+  userController.getFollowers,
 );
 
 module.exports = userRouter;

@@ -17,19 +17,13 @@ const authController = {
 
       const user = {
         email: userRecord.email,
+        uid: userRecord.uid,
       };
 
-      res.cookie("accessToken", idToken, { httpOnly: true });
       return res.status(200).json({ data: { user, idToken } });
     } catch (error) {
       next(error);
     }
-  },
-
-  // 로그아웃
-  logoutUser: (req, res) => {
-    res.clearCookie("accessToken");
-    res.status(200).json({ message: "로그아웃 성공" });
   },
 };
 

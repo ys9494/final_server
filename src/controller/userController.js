@@ -42,7 +42,7 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, blogName, nickname } = req.body;
+      const { email, blogName, nickname, bio } = req.body;
 
       const user = await userService.updateUser(id, {
         email,
@@ -53,6 +53,52 @@ const userController = {
       res.status(200).json(util.buildResponse(user));
     } catch (error) {
       next(error);
+    }
+  },
+
+  // user를 팔로우 하는 users
+  async getFollowers(req, res, next) {
+    try {
+      const followers = await userService.getFollowers(req.uid);
+      res.json(followers);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // user가 팔로우 하는 users
+  async getFollowings(req, res, next) {
+    try {
+      const followings = await userService.getFollowings(req.uid);
+      res.json(followings);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 추가
+  async addFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.addFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 취소
+  async deleteFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.deleteFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
   },
 
@@ -106,10 +152,7 @@ const userController = {
       // Firebase 사용자 삭제
       await auth.deleteUser(id);
 
-      res
-        .clearCookie("accessToken")
-        .status(204)
-        .json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
+      res.status(204).json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {
       next(error);
     }
