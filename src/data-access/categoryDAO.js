@@ -1,5 +1,4 @@
 const { Post, Category, User, Comment } = require("./models");
-const util = require("../misc/util");
 
 const categoryDAO = {
   // 카테고리 작성
@@ -10,10 +9,8 @@ const categoryDAO = {
 
   // 카테고리 조회
   async findAllBy(filter) {
-    const sanitizedFilter = util.sanitizeObject(filter);
-
     const categories = await Category.findAll({
-      where: sanitizedFilter,
+      where: filter,
     });
 
     return categories;
@@ -21,10 +18,8 @@ const categoryDAO = {
 
   // 카테고리 수정
   async updateOne(categoryDto, filter) {
-    const sanitizedToUpdate = util.sanitizeObject(filter);
-
     const updatedCategory = await Category.update(categoryDto, {
-      where: sanitizedToUpdate,
+      where: filter,
     });
 
     return updatedCategory;
@@ -32,9 +27,8 @@ const categoryDAO = {
 
   // 카테고리 삭제
   async deleteOne(filter) {
-    const sanitizedToUpdate = util.sanitizeObject(filter);
     const deletedCategory = await Category.destroy({
-      where: sanitizedToUpdate,
+      where: filter,
     });
 
     return deletedCategory;

@@ -12,10 +12,8 @@ const postDAO = {
 
   // 게시글 상세 조회
   async findOne(filter) {
-    const sanitizedFilter = util.sanitizeObject(filter);
-
     const post = await Post.findOne({
-      where: sanitizedFilter,
+      where: filter,
       attributes: ["id", "title", "content", "summary", "views", "createdAt"],
       include: [
         {
@@ -62,7 +60,7 @@ const postDAO = {
   // 게시글 조건 조회
   async findAllBy(filter) {
     const posts = await Post.findAll({
-      where: sanitizedFilter,
+      where: filter,
       attributes: ["id", "title", "content", "summary", "views", "createdAt"],
       include: [
         {
@@ -139,10 +137,8 @@ const postDAO = {
 
   // 게시글 수정
   async updateOne(postDTO, filter) {
-    const sanitizedToUpdate = util.sanitizeObject(filter);
-
     const updatedPost = await Post.update(postDTO, {
-      where: sanitizedToUpdate,
+      where: filter,
     });
 
     return updatedPost;
@@ -150,10 +146,8 @@ const postDAO = {
 
   // 게시글 삭제
   async deleteOne(filter) {
-    const sanitizedToUpdate = util.sanitizeObject(filter);
-
     const deletedPost = await Post.destroy({
-      where: sanitizedToUpdate,
+      where: filter,
     });
 
     return deletedPost;
