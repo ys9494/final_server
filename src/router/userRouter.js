@@ -49,7 +49,7 @@ userRouter.get(
 );
 // user를 팔로우 하는 users 목록 반환
 userRouter.get(
-  "followers",
+  "/followers",
   authMiddleware.verifyIdToken,
   userController.getFollowers
 );

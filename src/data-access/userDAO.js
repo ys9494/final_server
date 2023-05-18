@@ -3,13 +3,14 @@ const util = require("../misc/util");
 
 const userDAO = {
   // 회원가입
-  async create({ id, email, blogName, nickname, bio }) {
+  async create({ id, email, blogName, nickname, bio, admin }) {
     const user = await User.create({
       id,
       email,
       blogName,
       nickname,
       bio,
+      admin,
     });
     return user;
   },
@@ -22,6 +23,7 @@ const userDAO = {
       blogName: filter.blogName,
       nickname: filter.nickname,
       bio: filter.bio,
+      admin: filter.admin,
     });
 
     const user = await User.findOne({ where: sanitizedFilter });
@@ -143,12 +145,12 @@ const userDAO = {
   // 모든 사용자 조회
   async findAll(page, perPage) {
     const [total, users] = await Promise.all([
-      User.countDocuments({}),
-      User.find()
-        .lean()
-        .sort({ createdAt: -1 })
-        .skip(perPage * (page - 1))
-        .limit(perPage),
+      User.count(),
+      User.findAll({
+        order: [["createdAt", "DESC"]],
+        offset: perPage * (page - 1),
+        limit: perPage,
+      }),
     ]);
     const totalPage = Math.ceil(total / perPage);
     return { users, total, totalPage };
@@ -157,9 +159,11 @@ const userDAO = {
   // 사용자 정보 수정
   async updateOne(id, toUpdate) {
     const sanitizedToUpdate = util.sanitizeObject({
+      email: toUpdate.email,
       blogName: toUpdate.blogName,
       nickname: toUpdate.nickname,
       bio: toUpdate.bio,
+      admin: toUpdate.admin,
     });
 
     const [, updatedUsers] = await User.update(sanitizedToUpdate, {

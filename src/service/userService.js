@@ -2,7 +2,7 @@ const { userDAO } = require("../data-access");
 const util = require("../misc/util");
 
 const userService = {
-  async createUser({ id, blogName, email, nickname, bio }) {
+  async createUser({ id, blogName, email, nickname, bio, admin }) {
     const existedId = await userDAO.findOne({ id });
     if (existedId) {
       throw new Error("이미 가입된 계정입니다.");
@@ -24,6 +24,7 @@ const userService = {
       email,
       nickname,
       bio,
+      admin,
     });
     return createdUser;
   },
@@ -48,7 +49,7 @@ const userService = {
     return nicknameUser;
   },
 
-  async updateUser(id, { blogName, email, nickname, bio }) {
+  async updateUser(id, { blogName, email, nickname, bio, admin }) {
     // email 수정하는 경우 이메일 중복 검사
     if (email !== undefined) {
       const existedEmail = await userDAO.findOne({ email });
@@ -70,9 +71,10 @@ const userService = {
       blogName,
       nickname,
       bio,
+      admin,
     });
-    const servedUser = util.removePassword(updatedUser);
-    return servedUser;
+
+    return updatedUser;
   },
 
   async deleteUser(id) {
