@@ -29,8 +29,6 @@ const categoryController = {
   },
 
   async patchCategory(req, res, next) {
-    const userId = req.uid;
-
     try {
       const { categoryId } = req.params;
       const { name } = req.body;
@@ -41,7 +39,7 @@ const categoryController = {
 
       const updatedCategory = await categoryService.updateCategory(
         categoryId,
-        categoryDTO,
+        categoryDTO
       );
       res.json(util.buildResponse(updatedCategory));
     } catch (error) {

@@ -68,7 +68,6 @@ module.exports = class User extends Sequelize.Model {
       through: "Like",
       as: "Liked",
     });
-    // 팔로우 관계 추가
     db.User.belongsToMany(db.User, {
       through: "Follow",
       as: "Followers",

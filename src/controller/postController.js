@@ -7,7 +7,6 @@ const postController = {
     try {
       const userId = req.uid;
       const { categoryId, title, content, summary } = req.body;
-
       const postDTO = {
         UserId: userId,
         CategoryId: categoryId,

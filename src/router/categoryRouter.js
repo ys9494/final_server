@@ -8,6 +8,12 @@ const {
 
 const categoryRouter = express.Router();
 
+categoryRouter.get(
+  "/",
+  authMiddleware.verifyIdToken,
+  categoryController.getCategories
+);
+
 categoryRouter.post(
   "/",
   authMiddleware.verifyIdToken,

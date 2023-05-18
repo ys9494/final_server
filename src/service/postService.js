@@ -6,9 +6,8 @@ const postService = {
     return createdPost;
   },
 
-  async getPostsByCategory(userId, categoryId) {
+  async getPostsByCategory(categoryId) {
     const posts = await postDAO.findAllBy({
-      UserId: userId,
       CategoryId: categoryId,
     });
     return posts;

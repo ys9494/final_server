@@ -28,8 +28,6 @@ const userController = {
         nickname,
         blogName,
         bio,
-        blogName,
-        bio,
       });
 
       res.status(201).json(util.buildResponse(user));
