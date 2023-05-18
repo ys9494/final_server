@@ -58,6 +58,7 @@ postRouter.patch(
   postMiddleware.checkMinPostConditionFrom("body"),
   commonMiddleware.checkNonExistenceFrom("body", "categoryId", "카테고리"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  commonMiddleware.checkUserAuthorization,
   postController.patchPost,
 );
 
@@ -67,6 +68,7 @@ postRouter.delete(
   authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "postId"),
   commonMiddleware.checkNonExistenceFrom("params", "postId", "게시글"),
+  commonMiddleware.checkUserAuthorization,
   postController.deletePost,
 );
 

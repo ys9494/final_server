@@ -28,6 +28,7 @@ categoryRouter.patch(
   commonMiddleware.checkIdFrom("params", "categoryId"),
   categoryMiddleware.checkCompleteCategoryFrom("body"),
   commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
+  commonMiddleware.checkUserAuthorization,
   categoryController.patchCategory
 );
 
@@ -36,6 +37,7 @@ categoryRouter.delete(
   authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "categoryId"),
   commonMiddleware.checkNonExistenceFrom("params", "categoryId", "카테고리"),
+  commonMiddleware.checkUserAuthorization,
   categoryController.deleteCategory
 );
 

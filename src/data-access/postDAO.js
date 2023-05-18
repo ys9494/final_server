@@ -1,10 +1,13 @@
 const { Post, Category, User, Comment } = require("./models");
+const db = require('./models')
 const util = require("../misc/util");
 
 const postDAO = {
   // 게시글 작성
   async create(postDTO) {
-    const createdPost = await Post.create(postDTO);
+    const createdPost = await Post.create(postDTO,{
+      attributes: ["id"]
+    });
     return createdPost;
   },
 
@@ -14,6 +17,7 @@ const postDAO = {
 
     const post = await Post.findOne({
       where: sanitizedFilter,
+      attributes: ["id","title","content","summary","views","createdAt"],
       include: [
         {
           model: Category,
@@ -25,9 +29,9 @@ const postDAO = {
         },
         {
           model: User,
-          through: "Like", // DB 테이블 명
-          as: "Likers", // 프론트에 전달할 객체의 key
-          // attributes: ["id"],
+          through: { attributes: [] }, 
+          as: "Likers", 
+          attributes: ["nickname"],
         },
         {
           model: Comment,
@@ -39,7 +43,7 @@ const postDAO = {
         },
       ],
     });
-
+    
     return post;
   },
 
@@ -49,9 +53,16 @@ const postDAO = {
 
     const posts = await Post.findAll({
       where: sanitizedFilter,
+      attributes: ["id","title","content","summary","views","createdAt"],
       include: [
         {
           model: User,
+          attributes: ["nickname"],
+        },
+        {
+          model: User,
+          through: { attributes: [] }, 
+          as: "Likers", 
           attributes: ["nickname"],
         },
       ],
@@ -67,12 +78,19 @@ const postDAO = {
       offset = (pageNo - 1) * 4;
     }
     const posts = await Post.findAndCountAll({
+      attributes: ["id","title","content","summary","views","createdAt"],
       limit: 4, // 몇 개의 데이터를 보여줄지 결정(불변)
       offset: offset,
       order: [["createdAt", "desc"]],
       include: [
         {
           model: User,
+          attributes: ["nickname"],
+        },
+        {
+          model: User,
+          through: { attributes: [] }, 
+          as: "Likers", 
           attributes: ["nickname"],
         },
       ],
@@ -88,12 +106,19 @@ const postDAO = {
       offset = (pageNo - 1) * 4;
     }
     const posts = await Post.findAndCountAll({
+      attributes: ["id","title","content","summary","views","createdAt"],
       limit: 4, // 몇 개의 데이터를 보여줄지 결정(불변)
       offset: offset,
       order: [["views", "desc"]],
       include: [
         {
           model: User,
+          attributes: ["nickname"],
+        },
+        {
+          model: User,
+          through: { attributes: [] }, 
+          as: "Likers", 
           attributes: ["nickname"],
         },
       ],
@@ -110,8 +135,6 @@ const postDAO = {
       where: sanitizedToUpdate,
     });
 
-    console.log("log", updatedPost);
-
     return updatedPost;
   },
 
@@ -122,6 +145,7 @@ const postDAO = {
     const deletedPost = await Post.destroy({
       where: sanitizedToUpdate,
     });
+    
     return deletedPost;
   },
 };
