@@ -24,6 +24,7 @@ commentRouter.patch(
   commonMiddleware.checkIdFrom("params", "commentId"),
   commentMiddleware.checkCompleteCommentFrom("body"),
   commonMiddleware.checkNonExistenceFrom("params", "commentId", "댓글"),
+  commonMiddleware.checkUserAuthorization,
   commentController.patchComment
 );
 
@@ -32,6 +33,7 @@ commentRouter.delete(
   authMiddleware.verifyIdToken,
   commonMiddleware.checkIdFrom("params", "commentId"),
   commonMiddleware.checkNonExistenceFrom("params", "commentId", "댓글"),
+  commonMiddleware.checkUserAuthorization,
   commentController.deleteComment
 );
 

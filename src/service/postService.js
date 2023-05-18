@@ -18,6 +18,14 @@ const postService = {
     return post;
   },
 
+  async getAllPosts(page, perPage) {
+    const { posts, total, totalPage } = await postDAO.findAllPosts(
+      page,
+      perPage
+    );
+    return { posts, total, totalPage };
+  },
+
   async updatePost(postId, postDto) {
     const updatedPost = await postDAO.updateOne(postDto, { id: postId });
     return updatedPost;

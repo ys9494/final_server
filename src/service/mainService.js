@@ -1,8 +1,13 @@
 const { postDAO } = require("../data-access");
 
 const mainService = {
-  async getPosts() {
-    const posts = await postDAO.findAll();
+  async getPosts(pageNo) {
+    const posts = await postDAO.findAll(pageNo);
+    return posts;
+  },
+
+  async getPostsByTrending(pageNo) {
+    const posts = await postDAO.findAllByTrending(pageNo);
     return posts;
   },
 };

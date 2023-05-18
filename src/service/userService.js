@@ -38,6 +38,16 @@ const userService = {
     return { users, total, totalPage };
   },
 
+  async getMyPage(id) {
+    const user = await userDAO.findMyDetail({ id });
+    return user;
+  },
+
+  async getUserByNickname(nickname) {
+    const nicknameUser = await userDAO.findOneDetail({ nickname });
+    return nicknameUser;
+  },
+
   async updateUser(id, { blogName, email, nickname, bio }) {
     // email 수정하는 경우 이메일 중복 검사
     if (email !== undefined) {
@@ -71,6 +81,26 @@ const userService = {
       throw new Error("탈퇴할 사용자가 존재하지 않습니다.");
     }
     return deletedUser;
+  },
+
+  async getFollowers(id) {
+    const followers = await userDAO.findFollowers(id);
+    return followers;
+  },
+
+  async getFollowings(id) {
+    const followings = await userDAO.findFollowings(id);
+    return followings;
+  },
+
+  async addFollowing(userId, followingId) {
+    const result = await userDAO.addFollowing(userId, followingId);
+    return result;
+  },
+
+  async deleteFollowing(userId, followingId) {
+    const result = await userDAO.deleteFollowing(userId, followingId);
+    return result;
   },
 };
 

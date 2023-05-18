@@ -24,6 +24,7 @@ const userController = {
       const user = await userService.createUser({
         id,
         email,
+        password,
         nickname,
         blogName,
         bio,
@@ -39,9 +40,10 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { blogName, nickname } = req.body;
+      const { email, blogName, nickname, bio } = req.body;
 
       const user = await userService.updateUser(id, {
+        email,
         nickname,
         blogName,
         bio,
@@ -49,6 +51,52 @@ const userController = {
       res.status(200).json(util.buildResponse(user));
     } catch (error) {
       next(error);
+    }
+  },
+
+  // user를 팔로우 하는 users
+  async getFollowers(req, res, next) {
+    try {
+      const followers = await userService.getFollowers(req.uid);
+      res.json(followers);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // user가 팔로우 하는 users
+  async getFollowings(req, res, next) {
+    try {
+      const followings = await userService.getFollowings(req.uid);
+      res.json(followings);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 추가
+  async addFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.addFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  },
+
+  // 팔로우 취소
+  async deleteFollowing(req, res, next) {
+    try {
+      const { followingId } = req.params;
+      const result = await userService.deleteFollowing(req.uid, followingId);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
   },
 
@@ -63,6 +111,36 @@ const userController = {
     }
   },
 
+  // 사용자 정보 조회(유저 본인)
+  async getMyPage(req, res, next) {
+    try {
+      const id = req.uid;
+      const result = await userService.getMyPage(id);
+      if (!result) {
+        return res.status(404).send("존재하지 않는 회원입니다.");
+      }
+      res.json(util.buildResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // 닉네임으로 사용자 정보 조회(타유저)
+  async getUserByNickname(req, res, next) {
+    try {
+      const { nickname } = req.query;
+      console.log("nickname : ", nickname);
+      const result = await userService.getUserByNickname(nickname);
+      console.log("result : ", result);
+      if (!result) {
+        return res.status(404).send("존재하지 않는 닉네임입니다.");
+      }
+      res.json(util.buildResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // 사용자 정보 삭제 (회원 탈퇴)
   async deleteUser(req, res, next) {
     try {
@@ -72,10 +150,7 @@ const userController = {
       // Firebase 사용자 삭제
       await auth.deleteUser(id);
 
-      res
-        .clearCookie("accessToken")
-        .status(204)
-        .json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
+      res.status(204).json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {
       next(error);
     }

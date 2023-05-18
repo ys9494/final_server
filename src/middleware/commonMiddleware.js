@@ -20,17 +20,14 @@ const checkNonExistenceFrom =
   (from, checkId, table) => async (req, res, next) => {
     const id = req[from][checkId];
     const userId = req.uid;
-    const tableObj = {
+
+    const tableEnum = {
       ["게시글"]: Post,
       ["카테고리"]: Category,
       ["댓글"]: Comment,
     };
 
-    if (id === undefined) {
-      next();
-    }
-
-    const existPost = await tableObj[table].findOne({
+    const existPost = await tableEnum[table].findOne({
       where: {
         id,
       },
@@ -46,16 +43,25 @@ const checkNonExistenceFrom =
       );
     }
 
-    if (userId && existPost.userId !== userId) {
-      next(
-        new AppError(commonErrors.authorizationError, 403, `사용 권한이 없음`)
-      );
-    }
-
+    if (existPost) req.existPost = existPost;
     next();
   };
+
+const checkUserAuthorization = async (req, res, next) => {
+  const uid = req.uid;
+  const { userId } = req.existPost;
+
+  if (uid !== userId) {
+    next(
+      new AppError(commonErrors.authorizationError, 403, `사용 권한이 없음`)
+    );
+  }
+
+  next();
+};
 
 module.exports = {
   checkIdFrom,
   checkNonExistenceFrom,
+  checkUserAuthorization,
 };
