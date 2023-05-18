@@ -1,7 +1,6 @@
 const { postService, commentService } = require("../service");
 const { Post } = require("../data-access/models");
 const util = require("../misc/util");
-const upload = require('../config/s3')
 
 const postController = {
   async postPost(req, res, next) {
