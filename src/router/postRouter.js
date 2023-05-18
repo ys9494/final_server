@@ -4,11 +4,9 @@ const {
   postMiddleware,
   categoryMiddleware,
   commonMiddleware,
-  authMiddleware,
+  authMiddleware,  
 } = require("../middleware");
-const upload = require('../config/s3')
-
-
+const upload = require('../middleware/imageMiddleware')
 
 
 const postRouter = express.Router();
