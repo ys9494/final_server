@@ -82,6 +82,26 @@ const userService = {
     }
     return deletedUser;
   },
+
+  async getFollowers(id) {
+    const followers = await userDAO.findFollowers(id);
+    return followers;
+  },
+
+  async getFollowings(id) {
+    const followings = await userDAO.findFollowings(id);
+    return followings;
+  },
+
+  async addFollowing(userId, followingId) {
+    const result = await userDAO.addFollowing(userId, followingId);
+    return result;
+  },
+
+  async deleteFollowing(userId, followingId) {
+    const result = await userDAO.deleteFollowing(userId, followingId);
+    return result;
+  },
 };
 
 module.exports = userService;

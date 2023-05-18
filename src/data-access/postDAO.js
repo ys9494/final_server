@@ -47,6 +47,19 @@ const postDAO = {
     return post;
   },
 
+  async findAllPosts(page, perPage) {
+    const [total, posts] = await Promise.all([
+      Post.count(),
+      Post.findAll({
+        order: [["createdAt", "DESC"]],
+        offset: perPage * (page - 1),
+        limit: perPage,
+      }),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { posts, total, totalPage };
+  },
+
   // 게시글 조건 조회
   async findAllBy(filter) {
     const sanitizedFilter = util.sanitizeObject(filter);
