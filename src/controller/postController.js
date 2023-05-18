@@ -1,6 +1,7 @@
 const { postService, commentService } = require("../service");
 const { Post } = require("../data-access/models");
 const util = require("../misc/util");
+const upload = require('../config/s3')
 
 const postController = {
   async postPost(req, res, next) {
@@ -99,6 +100,19 @@ const postController = {
       res.status(200).json(util.buildResponse(updatedLike));
     } catch (error) {
       next(error);
+    }
+  },
+
+  async uploadImage(req, res, next) {
+    console.log('image request : ', req);
+    try {
+        if (!req.file) {
+          throw new Error('이미지 파일이 제공되지 않았습니다.');
+        }
+        const imageUrl = req.file.location;
+        res.status(200).json({ imageUrl: imageUrl });
+    } catch (error) {
+        next(error);
     }
   },
 };
