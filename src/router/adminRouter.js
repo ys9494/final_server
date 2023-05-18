@@ -20,14 +20,14 @@ adminRouter.delete(
 );
 // 모든 게시글 조회
 adminRouter.get(
-  "/post",
+  "/posts",
   authMiddleware.verifyAdmin,
   adminController.getPostList
 );
 
 // 게시글 삭제
 adminRouter.delete(
-  "/post/:postId",
+  "/posts/:postId",
   authMiddleware.verifyAdmin,
   postController.deletePost
 );

@@ -13,6 +13,5 @@ const checkNicknameFrom = (source, checkNickname) => {
 };
 module.exports = {
   // 다른 미들웨어 export 코드는 생략됨
-  checkUserIdFrom,
   checkNicknameFrom,
 };

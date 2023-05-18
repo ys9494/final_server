@@ -6,7 +6,7 @@ const userController = {
   // 회원가입
   async createUser(req, res, next) {
     try {
-      const { email, password, nickname, blogName, bio } = req.body;
+      const { email, password, nickname, blogName, bio, admin } = req.body;
       console.log(req.body);
       await initPromise;
       const firebaseAuth = getAuth();
@@ -28,8 +28,7 @@ const userController = {
         nickname,
         blogName,
         bio,
-        blogName,
-        bio,
+        admin,
       });
 
       res.status(201).json(util.buildResponse(user));
