@@ -18,7 +18,7 @@ module.exports = class Post extends Sequelize.Model {
           allowNull: false,
         },
         content: {
-          type: Sequelize.text,
+          type: Sequelize.TEXT,
           allowNull: false,
         },
         summary: {
