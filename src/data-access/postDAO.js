@@ -85,11 +85,11 @@ const postDAO = {
   async findAll(pageNo) {
     let offset = 0; // 조회를 시작할 기준점 = 클릭하는 페이지 넘버
     if (pageNo > 1) {
-      offset = (pageNo - 1) * 4;
+      offset = (pageNo - 1) * 8;
     }
     const posts = await Post.findAndCountAll({
       attributes: ["id", "title", "content", "summary", "views", "createdAt"],
-      limit: 4, // 몇 개의 데이터를 보여줄지 결정(불변)
+      limit: 8, // 몇 개의 데이터를 보여줄지 결정(불변)
       offset: offset,
       order: [["createdAt", "desc"]],
       include: [
@@ -113,11 +113,11 @@ const postDAO = {
   async findAllByTrending(pageNo) {
     let offset = 0; // 조회를 시작할 기준점 = 클릭하는 페이지 넘버
     if (pageNo > 1) {
-      offset = (pageNo - 1) * 4;
+      offset = (pageNo - 1) * 8;
     }
     const posts = await Post.findAndCountAll({
       attributes: ["id", "title", "content", "summary", "views", "createdAt"],
-      limit: 4, // 몇 개의 데이터를 보여줄지 결정(불변)
+      limit: 8, // 몇 개의 데이터를 보여줄지 결정(불변)
       offset: offset,
       order: [["views", "desc"]],
       include: [
