@@ -4,9 +4,7 @@ const util = require("../misc/util");
 const postDAO = {
   // 게시글 작성
   async create(postDTO) {
-    const createdPost = await Post.create(postDTO, {
-      attributes: ["id"],
-    });
+    const createdPost = await Post.create(postDTO);
     return createdPost;
   },
 
