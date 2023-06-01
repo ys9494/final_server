@@ -37,19 +37,48 @@ const userController = {
     }
   },
 
+  // 이미지업로드
+  async uploadImage(req, res, next) {
+    console.log("image request : ", req);
+    try {
+      if (!req.file) {
+        throw new Error("이미지 파일이 제공되지 않았습니다.");
+      }
+      const imageUrl = req.file.location;
+      res.status(200).json({ imageUrl: imageUrl });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // 사용자 정보 수정
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, blogName, nickname, bio } = req.body;
+      const { email, password, nickname, blogName, bio } = req.body;
+      const firebaseAuth = getAuth();
 
-      const user = await userService.updateUser(id, {
+      // Firebase 사용자 이메일, 비밀번호, 닉네임 변경
+      const user = await firebaseAuth.getUser(id);
+      if (user) {
+        if (email) {
+          await firebaseAuth.updateUser(user.uid, { email });
+        }
+        if (password) {
+          await firebaseAuth.updateUser(user.uid, { password });
+        }
+        if (nickname) {
+          await firebaseAuth.updateUser(user.uid, { displayName: nickname });
+        }
+      }
+
+      const updatedUser = await userService.updateUser(id, {
         email,
         nickname,
         blogName,
         bio,
       });
-      res.status(200).json(util.buildResponse(user));
+      res.status(200).json(util.buildResponse(updatedUser));
     } catch (error) {
       next(error);
     }
@@ -146,10 +175,12 @@ const userController = {
   async deleteUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const user = await userService.deleteUser(uid);
+      const auth = getAuth();
 
       // Firebase 사용자 삭제
       await auth.deleteUser(id);
+
+      const user = await userService.deleteUser(id);
 
       res.status(204).json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {

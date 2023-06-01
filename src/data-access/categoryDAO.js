@@ -11,6 +11,12 @@ const categoryDAO = {
   async findAllBy(filter) {
     const categories = await Category.findAll({
       where: filter,
+      include: [
+        {
+          model: Post,
+          attributes: ["id"],
+        },
+      ],
     });
 
     return categories;

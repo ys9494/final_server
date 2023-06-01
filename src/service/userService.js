@@ -49,15 +49,7 @@ const userService = {
     return nicknameUser;
   },
 
-  async updateUser(id, { blogName, email, nickname, bio, admin }) {
-    // email 수정하는 경우 이메일 중복 검사
-    if (email !== undefined) {
-      const existedEmail = await userDAO.findOne({ email });
-      if (existedEmail) {
-        throw new Error("이미 가입된 이메일입니다.");
-      }
-    }
-
+  async updateUser(id, { blogName, bio, nickname }) {
     // nickname 수정하는 경우 닉네임 중복 검사
     if (nickname !== undefined) {
       const existedNickname = await userDAO.findOne({ nickname });
@@ -67,11 +59,9 @@ const userService = {
     }
 
     const updatedUser = await userDAO.updateOne(id, {
-      email,
       blogName,
       nickname,
       bio,
-      admin,
     });
 
     return updatedUser;

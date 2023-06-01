@@ -46,17 +46,21 @@ const userDAO = {
         {
           model: Category,
           attributes: ["id", "name"],
+          include: [{ model: Post, attributes: ["id"] }],
         },
         {
           model: Post,
-          attributes: [
-            "id",
-            "title",
-            "content",
-            "summary",
-            "createdAt",
-            "updatedAt",
-          ],
+          attributes: ["id", "title", "summary", "views", "createdAt"],
+        },
+        {
+          model: User,
+          as: "Followings",
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id", "nickname"],
         },
       ],
     });
@@ -79,17 +83,21 @@ const userDAO = {
         {
           model: Category,
           attributes: ["id", "name"],
+          include: [{ model: Post, attributes: ["id"] }],
         },
         {
           model: Post,
-          attributes: [
-            "id",
-            "title",
-            "content",
-            "summary",
-            "createdAt",
-            "updatedAt",
-          ],
+          attributes: ["id", "title", "summary", "views", "createdAt"],
+        },
+        {
+          model: User,
+          as: "Followings",
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id", "nickname"],
         },
       ],
     });
