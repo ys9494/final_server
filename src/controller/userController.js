@@ -1,6 +1,7 @@
 const { userService } = require("../service");
 const util = require("../misc/util");
 const { getAuth, initPromise } = require("../config").firebase;
+const upload = require("../config/s3");
 
 const userController = {
   // 회원가입
@@ -37,47 +38,43 @@ const userController = {
     }
   },
 
-  // 이미지업로드
-  async uploadImage(req, res, next) {
-    console.log("image request : ", req);
-    try {
-      if (!req.file) {
-        throw new Error("이미지 파일이 제공되지 않았습니다.");
-      }
-      const imageUrl = req.file.location;
-      res.status(200).json({ imageUrl: imageUrl });
-    } catch (error) {
-      next(error);
-    }
-  },
-
   // 사용자 정보 수정
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, password, nickname, blogName, bio } = req.body;
-      const firebaseAuth = getAuth();
+      const { blogName, bio } = req.body;
+      const image = req.image;
+
+      console.log("image", req.image);
+
+      // const firebaseAuth = getAuth();
 
       // Firebase 사용자 이메일, 비밀번호, 닉네임 변경
-      const user = await firebaseAuth.getUser(id);
-      if (user) {
-        if (email) {
-          await firebaseAuth.updateUser(user.uid, { email });
-        }
-        if (password) {
-          await firebaseAuth.updateUser(user.uid, { password });
-        }
-        if (nickname) {
-          await firebaseAuth.updateUser(user.uid, { displayName: nickname });
-        }
-      }
+      // const user = await firebaseAuth.getUser(id);
+      // if (user) {
+      //   if (email) {
+      //     await firebaseAuth.updateUser(user.uid, { email });
+      //   }
+      //   if (password) {
+      //     await firebaseAuth.updateUser(user.uid, { password });
+      //   }
+      //   if (nickname) {
+      //     await firebaseAuth.updateUser(user.uid, { displayName: nickname });
+      //   }
+      // }
 
-      const updatedUser = await userService.updateUser(id, {
-        email,
-        nickname,
+      const userDto = {
         blogName,
         bio,
-      });
+      };
+
+      if (image) {
+        userDto.image = image;
+      } else {
+        userDto.image = null;
+      }
+
+      const updatedUser = await userService.updateUser(id, userDto);
       res.status(200).json(util.buildResponse(updatedUser));
     } catch (error) {
       next(error);

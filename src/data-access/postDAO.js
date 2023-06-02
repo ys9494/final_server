@@ -20,13 +20,13 @@ const postDAO = {
         },
         {
           model: User,
-          attributes: ["nickname"],
+          attributes: ["nickname", "image"],
         },
         {
           model: User,
           through: { attributes: [] },
           as: "Likers",
-          attributes: ["nickname"],
+          attributes: ["nickname", "image"],
         },
         {
           model: Comment,
@@ -63,7 +63,7 @@ const postDAO = {
       include: [
         {
           model: User,
-          attributes: ["nickname"],
+          attributes: ["nickname", "image"],
         },
         {
           model: User,
@@ -91,7 +91,7 @@ const postDAO = {
       include: [
         {
           model: User,
-          attributes: ["nickname"],
+          attributes: ["nickname", "image"],
         },
         {
           model: User,
@@ -119,7 +119,7 @@ const postDAO = {
       include: [
         {
           model: User,
-          attributes: ["nickname"],
+          attributes: ["nickname", "image"],
         },
         {
           model: User,

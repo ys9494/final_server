@@ -51,6 +51,14 @@ const userDAO = {
         {
           model: Post,
           attributes: ["id", "title", "summary", "views", "createdAt"],
+          include: [
+            {
+              model: User,
+              through: { attributes: [] },
+              as: "Likers",
+              attributes: ["nickname"],
+            },
+          ],
         },
         {
           model: User,
@@ -88,6 +96,14 @@ const userDAO = {
         {
           model: Post,
           attributes: ["id", "title", "summary", "views", "createdAt"],
+          include: [
+            {
+              model: User,
+              through: { attributes: [] },
+              as: "Likers",
+              attributes: ["nickname"],
+            },
+          ],
         },
         {
           model: User,
@@ -165,20 +181,10 @@ const userDAO = {
   },
 
   // 사용자 정보 수정
-  async updateOne(id, toUpdate) {
-    const sanitizedToUpdate = util.sanitizeObject({
-      email: toUpdate.email,
-      blogName: toUpdate.blogName,
-      nickname: toUpdate.nickname,
-      bio: toUpdate.bio,
-      admin: toUpdate.admin,
+  async updateOne(userDto, filter) {
+    const updatedUser = await User.update(userDto, {
+      where: filter,
     });
-
-    const [, updatedUsers] = await User.update(sanitizedToUpdate, {
-      where: { id },
-      returning: true,
-    });
-    const updatedUser = updatedUsers[0];
     return updatedUser;
   },
 

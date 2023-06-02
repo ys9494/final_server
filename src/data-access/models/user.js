@@ -31,7 +31,7 @@ module.exports = class User extends Sequelize.Model {
         },
         image: {
           type: Sequelize.STRING(500),
-          allowNull: false,
+          allowNull: true,
         },
       },
       {
@@ -71,6 +71,7 @@ module.exports = class User extends Sequelize.Model {
     db.User.belongsToMany(db.Post, {
       through: "Like",
       as: "Liked",
+      foreignKey: "UserId",
     });
     db.User.belongsToMany(db.User, {
       through: "Follow",

@@ -49,20 +49,19 @@ const userService = {
     return nicknameUser;
   },
 
-  async updateUser(id, { blogName, bio, nickname }) {
+  async updateUser(id, userDto) {
     // nickname 수정하는 경우 닉네임 중복 검사
-    if (nickname !== undefined) {
-      const existedNickname = await userDAO.findOne({ nickname });
-      if (existedNickname) {
-        throw new Error("중복되는 닉네임입니다.");
-      }
-    }
+    // const { nickname } = userDto;
+    // if (nickname !== undefined) {
+    //   const existedNickname = await userDAO.findOne({ nickname });
+    //   if (existedNickname) {
+    //     throw new Error("중복되는 닉네임입니다.");
+    //   }
+    // }
 
-    const updatedUser = await userDAO.updateOne(id, {
-      blogName,
-      nickname,
-      bio,
-    });
+    console.log("dto", userDto);
+
+    const updatedUser = await userDAO.updateOne(userDto, { id });
 
     return updatedUser;
   },

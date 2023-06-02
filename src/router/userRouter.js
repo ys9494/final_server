@@ -1,10 +1,12 @@
 const express = require("express");
-const { userController } = require("../controller");
+const { userController, imageController } = require("../controller");
 const {
   commonMiddleware,
   userMiddleware,
   authMiddleware,
+  imageMiddleware,
 } = require("../middleware");
+// const upload = require("../middleware/imageMiddleware");
 
 const userRouter = express.Router();
 
@@ -22,7 +24,12 @@ userRouter.get(
 );
 
 // 개인페이지 > 내 정보(정보 수정 中 정보 수정)
-userRouter.patch("/", authMiddleware.verifyIdToken, userController.updateUser);
+userRouter.patch(
+  "/",
+  authMiddleware.verifyIdToken,
+  imageMiddleware.uploadImage,
+  userController.updateUser
+);
 
 // 개인페이지 > 내 정보(정보 수정 中 정보 삭제(탈퇴))
 userRouter.delete("/", authMiddleware.verifyIdToken, userController.deleteUser);
@@ -50,15 +57,6 @@ userRouter.get(
   "/followers",
   authMiddleware.verifyIdToken,
   userController.getFollowers
-);
-
-// 이미지 업로드
-userRouter.post(
-  "/image",
-  // authMiddleware.verifyIdToken,
-  upload.single("image"),
-  userRouter.uploadImage
-  // postController.postPost,
 );
 
 module.exports = userRouter;

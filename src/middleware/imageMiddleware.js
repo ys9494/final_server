@@ -14,4 +14,25 @@ const upload = multer({
   limit: { fileSize: 20 * 1024 * 1024 },
 });
 
-module.exports = upload;
+const uploadImage = async (req, res, next) => {
+  try {
+    const uploadMiddleware = upload.single("image");
+    uploadMiddleware(req, res, (err) => {
+      if (err) {
+        throw new Error("이미지 업로드 실패");
+      }
+
+      if (req.file) {
+        req.image = req.file.location;
+      }
+
+      next();
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  uploadImage,
+};
