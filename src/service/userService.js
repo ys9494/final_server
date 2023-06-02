@@ -49,30 +49,19 @@ const userService = {
     return nicknameUser;
   },
 
-  async updateUser(id, { blogName, email, nickname, bio, admin }) {
-    // email 수정하는 경우 이메일 중복 검사
-    if (email !== undefined) {
-      const existedEmail = await userDAO.findOne({ email });
-      if (existedEmail) {
-        throw new Error("이미 가입된 이메일입니다.");
-      }
-    }
-
+  async updateUser(id, userDto) {
     // nickname 수정하는 경우 닉네임 중복 검사
-    if (nickname !== undefined) {
-      const existedNickname = await userDAO.findOne({ nickname });
-      if (existedNickname) {
-        throw new Error("중복되는 닉네임입니다.");
-      }
-    }
+    // const { nickname } = userDto;
+    // if (nickname !== undefined) {
+    //   const existedNickname = await userDAO.findOne({ nickname });
+    //   if (existedNickname) {
+    //     throw new Error("중복되는 닉네임입니다.");
+    //   }
+    // }
 
-    const updatedUser = await userDAO.updateOne(id, {
-      email,
-      blogName,
-      nickname,
-      bio,
-      admin,
-    });
+    console.log("dto", userDto);
+
+    const updatedUser = await userDAO.updateOne(userDto, { id });
 
     return updatedUser;
   },

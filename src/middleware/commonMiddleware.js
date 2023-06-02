@@ -27,6 +27,10 @@ const checkNonExistenceFrom =
       ["댓글"]: Comment,
     };
 
+    if (id === undefined || id === null) {
+      next();
+    }
+
     const existPost = await tableEnum[table].findOne({
       where: {
         id,

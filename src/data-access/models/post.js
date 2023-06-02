@@ -14,15 +14,15 @@ module.exports = class Post extends Sequelize.Model {
           onDelete: "SET NULL",
         },
         title: {
-          type: Sequelize.STRING(100),
+          type: Sequelize.STRING(50),
           allowNull: false,
         },
         content: {
-          type: Sequelize.STRING(100),
+          type: Sequelize.TEXT,
           allowNull: false,
         },
         summary: {
-          type: Sequelize.STRING(100),
+          type: Sequelize.STRING(200),
           allowNull: true,
         },
         views: {

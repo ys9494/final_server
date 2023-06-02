@@ -4,6 +4,7 @@ const authMiddleware = require("./authMiddleware");
 const userMiddleware = require("./userMiddleware");
 const commentMiddleware = require("./commentMiddleware");
 const commonMiddleware = require("./commonMiddleware");
+const imageMiddleware = require("./imageMiddleware");
 
 module.exports = {
   postMiddleware,
@@ -12,4 +13,5 @@ module.exports = {
   authMiddleware,
   commentMiddleware,
   commonMiddleware,
+  imageMiddleware,
 };
