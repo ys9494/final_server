@@ -1,4 +1,4 @@
-const { Post, Category, User, Comment } = require("./models");
+const { Post, Category } = require("./models");
 
 const categoryDAO = {
   // 카테고리 작성
@@ -17,6 +17,7 @@ const categoryDAO = {
           attributes: ["id"],
         },
       ],
+      order: [[Post, "createdAt", "DESC"]],
     });
 
     return categories;

@@ -37,6 +37,7 @@ const postDAO = {
           },
         },
       ],
+      order: [[Comment, "createdAt", "DESC"]],
     });
 
     return post;
@@ -60,6 +61,7 @@ const postDAO = {
     const posts = await Post.findAll({
       where: filter,
       attributes: ["id", "title", "content", "summary", "views", "createdAt"],
+      order: [["createdAt", "desc"]],
       include: [
         {
           model: User,
