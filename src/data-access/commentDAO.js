@@ -1,5 +1,4 @@
-const { Post, Category, User, Comment } = require("./models");
-const util = require("../misc/util");
+const { Comment } = require("./models");
 
 const commentDAO = {
   // 댓글 작성
@@ -10,7 +9,9 @@ const commentDAO = {
 
   // 댓글 조회
   async findOne(filter) {
-    const comment = await Comment.findOne({ where: filter });
+    const comment = await Comment.findOne({
+      where: filter,
+    });
     return comment;
   },
 

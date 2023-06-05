@@ -45,7 +45,9 @@ const userService = {
   },
 
   async getUserByNickname(nickname) {
+    console.log("nick", nickname);
     const nicknameUser = await userDAO.findOneDetail({ nickname });
+    console.log("userrrrrrrrrrrr", nicknameUser.Posts);
     return nicknameUser;
   },
 
