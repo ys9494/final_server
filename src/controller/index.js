@@ -6,6 +6,7 @@ const mainController = require("./mainController");
 const commentController = require("./commentController ");
 const searchController = require("./searchController");
 const adminController = require("./adminController");
+const imageController = require("./imageController");
 
 module.exports = {
   postController,
@@ -16,4 +17,5 @@ module.exports = {
   commentController,
   searchController,
   adminController,
+  imageController,
 };

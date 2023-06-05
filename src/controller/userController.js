@@ -1,6 +1,7 @@
 const { userService } = require("../service");
 const util = require("../misc/util");
 const { getAuth, initPromise } = require("../config").firebase;
+const upload = require("../config/s3");
 
 const userController = {
   // 회원가입
@@ -41,15 +42,40 @@ const userController = {
   async updateUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const { email, blogName, nickname, bio } = req.body;
+      const { blogName, bio } = req.body;
+      const image = req.image;
 
-      const user = await userService.updateUser(id, {
-        email,
-        nickname,
+      console.log("image", req.image);
+
+      // const firebaseAuth = getAuth();
+
+      // Firebase 사용자 이메일, 비밀번호, 닉네임 변경
+      // const user = await firebaseAuth.getUser(id);
+      // if (user) {
+      //   if (email) {
+      //     await firebaseAuth.updateUser(user.uid, { email });
+      //   }
+      //   if (password) {
+      //     await firebaseAuth.updateUser(user.uid, { password });
+      //   }
+      //   if (nickname) {
+      //     await firebaseAuth.updateUser(user.uid, { displayName: nickname });
+      //   }
+      // }
+
+      const userDto = {
         blogName,
         bio,
-      });
-      res.status(200).json(util.buildResponse(user));
+      };
+
+      if (image) {
+        userDto.image = image;
+      } else {
+        userDto.image = null;
+      }
+
+      const updatedUser = await userService.updateUser(id, userDto);
+      res.status(200).json(util.buildResponse(updatedUser));
     } catch (error) {
       next(error);
     }
@@ -146,10 +172,12 @@ const userController = {
   async deleteUser(req, res, next) {
     try {
       const id = req.uid; // 수정된 부분
-      const user = await userService.deleteUser(uid);
+      const auth = getAuth();
 
       // Firebase 사용자 삭제
       await auth.deleteUser(id);
+
+      const user = await userService.deleteUser(id);
 
       res.status(204).json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch (error) {

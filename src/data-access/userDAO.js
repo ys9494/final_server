@@ -46,17 +46,29 @@ const userDAO = {
         {
           model: Category,
           attributes: ["id", "name"],
+          include: [{ model: Post, attributes: ["id"] }],
         },
         {
           model: Post,
-          attributes: [
-            "id",
-            "title",
-            "content",
-            "summary",
-            "createdAt",
-            "updatedAt",
+          attributes: ["id", "title", "summary", "views", "createdAt"],
+          include: [
+            {
+              model: User,
+              through: { attributes: [] },
+              as: "Likers",
+              attributes: ["nickname"],
+            },
           ],
+        },
+        {
+          model: User,
+          as: "Followings",
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id", "nickname"],
         },
       ],
     });
@@ -79,17 +91,29 @@ const userDAO = {
         {
           model: Category,
           attributes: ["id", "name"],
+          include: [{ model: Post, attributes: ["id"] }],
         },
         {
           model: Post,
-          attributes: [
-            "id",
-            "title",
-            "content",
-            "summary",
-            "createdAt",
-            "updatedAt",
+          attributes: ["id", "title", "summary", "views", "createdAt"],
+          include: [
+            {
+              model: User,
+              through: { attributes: [] },
+              as: "Likers",
+              attributes: ["nickname"],
+            },
           ],
+        },
+        {
+          model: User,
+          as: "Followings",
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id", "nickname"],
         },
       ],
     });
@@ -157,20 +181,10 @@ const userDAO = {
   },
 
   // 사용자 정보 수정
-  async updateOne(id, toUpdate) {
-    const sanitizedToUpdate = util.sanitizeObject({
-      email: toUpdate.email,
-      blogName: toUpdate.blogName,
-      nickname: toUpdate.nickname,
-      bio: toUpdate.bio,
-      admin: toUpdate.admin,
+  async updateOne(userDto, filter) {
+    const updatedUser = await User.update(userDto, {
+      where: filter,
     });
-
-    const [, updatedUsers] = await User.update(sanitizedToUpdate, {
-      where: { id },
-      returning: true,
-    });
-    const updatedUser = updatedUsers[0];
     return updatedUser;
   },
 
