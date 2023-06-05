@@ -71,7 +71,10 @@ const userDAO = {
           attributes: ["id", "nickname"],
         },
       ],
-      order: [[Post, "createdAt", "DESC"]],
+      order: [
+        [Post, "createdAt", "DESC"],
+        [Category, "createdAt", "ASC"],
+      ],
     });
     return user;
   },
@@ -117,7 +120,10 @@ const userDAO = {
           attributes: ["id", "nickname"],
         },
       ],
-      order: [[Post, "createdAt", "DESC"]],
+      order: [
+        [Post, "createdAt", "DESC"],
+        [Category, "createdAt", "ASC"],
+      ],
     });
     return user;
   },
