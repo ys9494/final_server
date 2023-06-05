@@ -17,7 +17,6 @@ const categoryDAO = {
           attributes: ["id"],
         },
       ],
-      order: [[Post, "createdAt", "ASC"]],
     });
 
     return categories;
