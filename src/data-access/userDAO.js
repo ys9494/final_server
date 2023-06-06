@@ -58,6 +58,7 @@ const userDAO = {
               as: "Likers",
               attributes: ["nickname"],
             },
+            { model: User, attributes: ["nickname", "image"] },
           ],
         },
         {
@@ -107,6 +108,7 @@ const userDAO = {
               as: "Likers",
               attributes: ["nickname"],
             },
+            { model: User, attributes: ["nickname", "image"] },
           ],
         },
         {
