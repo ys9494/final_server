@@ -34,5 +34,6 @@ const uploadImage = async (req, res, next) => {
 };
 
 module.exports = {
+  upload,
   uploadImage,
 };
