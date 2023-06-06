@@ -156,7 +156,7 @@ const userController = {
   async getUserByNickname(req, res, next) {
     try {
       const { nickname } = req.query;
-      console.log("nickname : ", nickname);
+      // console.log("nickname : ", nickname);
       const result = await userService.getUserByNickname(nickname);
       console.log("result : ", result);
       if (!result) {

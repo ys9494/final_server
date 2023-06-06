@@ -11,6 +11,7 @@ const categoryDAO = {
   async findAllBy(filter) {
     const categories = await Category.findAll({
       where: filter,
+      order: [["createdAt", "ASC"]],
       include: [
         {
           model: Post,
