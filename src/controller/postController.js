@@ -100,6 +100,19 @@ const postController = {
       next(error);
     }
   },
+
+  async uploadPostImage(req, res, next) {
+    // console.log("image request : ", req);
+    try {
+      if (!req.file) {
+        throw new Error("이미지 파일이 제공되지 않았습니다.");
+      }
+      const imageUrl = req.file.location;
+      res.status(200).json({ imageUrl: imageUrl });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = postController;
