@@ -33,7 +33,7 @@ const postDAO = {
           attributes: ["id", "content", "createdAt"],
           include: {
             model: User,
-            attributes: ["nickname"],
+            attributes: ["nickname", "image"],
           },
         },
       ],
